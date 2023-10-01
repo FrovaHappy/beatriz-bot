@@ -21,3 +21,10 @@ npm run build
 ```bash
 npm run start
 ```
+## Variables de Entorno
+```js
+DISCORD_TOKEN = ""
+DISCORD_CLIENT = ""
+DISCORD_GUILD = ""
+DEFAULT_COOLDOWN = "un numero entero en segundos"
+```
