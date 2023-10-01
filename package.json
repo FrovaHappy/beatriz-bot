@@ -1,0 +1,28 @@
+{
+  "name": "beatriz-bot",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev:deploy": "ts-node src/deployCommands.ts",
+    "build": "tsc --build",
+    "start": "node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "14.13.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "eslint": "^8.50.0",
+    "eslint-config-standard-with-typescript": "^39.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "nodemon": "3.0.1",
+    "ts-node": "10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
