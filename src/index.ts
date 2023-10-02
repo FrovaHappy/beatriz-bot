@@ -3,6 +3,7 @@ import path from 'node:path'
 import { Client, Collection, GatewayIntentBits } from 'discord.js'
 import config from './config'
 import type { ClientCustom } from './types/main'
+
 async function BuildCollection<G, T>(pointFolder: string): Promise<Collection<G, T>> {
   const collection = new Collection<G, T>()
   const foldersPath = path.join(__dirname, pointFolder)
