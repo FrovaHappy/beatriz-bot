@@ -6,7 +6,7 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "dev:deploy": "ts-node src/deployCommands.ts",
     "dev:prisma": "npx prisma db push",
-    "build": "tsc --build",
+    "build": "npm run dev:prisma && tsc --build",
     "start": "node ./dist/index.js"
   },
   "keywords": [],
