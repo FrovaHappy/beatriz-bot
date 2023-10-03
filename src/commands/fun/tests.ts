@@ -1,11 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } from 'discord.js'
-import type { BaseFileCommand } from '../../types/BaseFiles'
 import { CommandsNames } from '../../enums'
-import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient()
+import BuildCommand from '../../command.schema'
+import db from '../../db'
 
 const name = CommandsNames.test
-export default {
+export default BuildCommand({
   cooldown: 60,
   type: 'command',
   name,
@@ -13,7 +12,7 @@ export default {
   data: new SlashCommandBuilder().setName(name).setDescription('Replies with Pong!'),
   async execute(interaction) {
     if (!interaction.guildId) return
-    const res = await prisma.server.upsert({
+    const res = await db.server.upsert({
       where: { serverId: interaction.guildId },
       create: { accessCommand: 'public', serverId: interaction.guildId, colorRoleId: '' },
       update: {}
@@ -24,4 +23,4 @@ export default {
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirm)
     interaction.reply({ content: 'test!', components: [row] })
   }
-} satisfies BaseFileCommand
+})

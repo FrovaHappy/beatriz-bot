@@ -1,8 +1,8 @@
+import BuildCommand from '../../command.schema'
 import { ButtonsNames, CommandsNames } from '../../enums'
-import type { BaseFileCommand } from '../../types/BaseFiles'
 import { ActionRowBuilder, type ButtonBuilder, SlashCommandBuilder } from 'discord.js'
 const name = CommandsNames.ping
-export default {
+export default BuildCommand({
   cooldown: 30,
   type: 'command',
   name,
@@ -13,4 +13,4 @@ export default {
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirm)
     interaction.reply({ content: 'pong!', components: [row] })
   }
-} satisfies BaseFileCommand
+})

@@ -11,6 +11,6 @@ export interface ClientCustom extends Client {
 export interface BaseEventInteractionCreate {
   name: CommandsNames | ButtonsNames
   type: 'command' | 'button'
-  scope: 'public' | 'private'
+  scope: 'public' | 'private' | 'owner'
   cooldown?: number
 }
