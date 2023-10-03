@@ -23,16 +23,13 @@ npm run start
 ```
 ## Variables de Entorno
 ```js
-DISCORD_TOKEN = ""
-DISCORD_CLIENT = ""
-DISCORD_GUILD = ""
+DISCORD_TOKEN = "token del bot"
+DISCORD_CLIENT = "id del bot"
+DISCORD_GUILDS = "un array de ids" // ejem: '["guildId"]' usar las comillas simple en el exterior 
 DEFAULT_COOLDOWN = "un numero entero en segundos"
-# This was inserted by `prisma init`:
-# Environment variables declared in this file are automatically made available to Prisma.
+DISCORD_OWNER = "id del usuario principal de bot"
+DISCORD_GUILD_OWNER = "id del server donde se desplegaran los comandos el owner"
+
 # See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
-
-# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
-# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
-
 DATABASE_URL="mongodb+srv://root:randompassword@cluster0.ab1cd.mongodb.net/mydb?retryWrites=true&w=majority"
 ```

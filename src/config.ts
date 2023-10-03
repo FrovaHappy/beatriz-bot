@@ -7,7 +7,7 @@ const validateCommand = (command: BaseFileCommand): boolean => {
 }
 const discordGuild = (): string[] => {
   try {
-    return JSON.parse(process.env.DISCORD_GUILD ?? '')
+    return JSON.parse(process.env.DISCORD_GUILDS ?? '')
   } catch {
     return []
   }
@@ -16,7 +16,7 @@ export default {
   discordToken: process.env.DISCORD_TOKEN ?? '',
   discordClient: process.env.DISCORD_CLIENT ?? '',
   discordGuild: discordGuild(),
-  discordOwner: process.env.DISCORD_OWNER ?? '',
+  discordOwner: { id: process.env.DISCORD_OWNER ?? '', guildId: process.env.DISCORD_GUILD_OWNER ?? '' },
   defaultCooldown: parseInt(process.env.DEFAULT_COOLDOWN ?? '0'),
   validateCommand,
   commandKeys
