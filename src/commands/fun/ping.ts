@@ -1,12 +1,11 @@
-import BuildCommand from '../../command.schema'
+import { BuildCommand } from '../../buildersSchema'
 import { ButtonsNames, CommandsNames } from '../../enums'
 import { ActionRowBuilder, type ButtonBuilder, SlashCommandBuilder } from 'discord.js'
 const name = CommandsNames.ping
 export default BuildCommand({
   cooldown: 30,
-  type: 'command',
   name,
-  scope: 'public',
+  scope: 'owner',
   data: new SlashCommandBuilder().setName(name).setDescription('Replies with Pong!'),
   async execute(interaction) {
     const confirm = interaction.client.buttons.get(ButtonsNames.ping)?.data
