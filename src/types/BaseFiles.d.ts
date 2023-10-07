@@ -7,6 +7,7 @@ export interface BaseFileCommand extends BaseEventInteractionCreate {
   type: 'command'
   execute: (interaction: CustomCommandInteraction) => Promise<unknown>
 }
+
 export interface BaseFileButton extends BaseEventInteractionCreate {
   data: ButtonBuilder
   name: ButtonsNames

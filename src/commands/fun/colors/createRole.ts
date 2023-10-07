@@ -6,10 +6,15 @@ export default async function createRole(interaction: CustomCommandInteraction):
   const role = await interaction.guild?.roles
     .create({
       name: `🎨 Controller colors (${interaction.client.user?.username})`,
-      hoist: false
+      hoist: false,
+      permissions: '0'
     })
     .then(role => role)
   if (!role) return null
-  db.server.update({ where: { serverId: interaction.user.id }, data: { colorRoleId: role.id } })
+  const server = await db.server.update({
+    where: { serverId: interaction.guildId ?? '' },
+    data: { colorRoleId: role.id }
+  })
+  if (server === null) return null
   return role
 }

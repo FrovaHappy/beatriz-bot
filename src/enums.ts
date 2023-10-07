@@ -4,5 +4,7 @@ export const enum CommandsNames {
   colors = 'colors'
 }
 export const enum ButtonsNames {
-  ping = 'ping'
+  ping = 'ping',
+  colors_set_pack = 'colors_set_pack',
+  colors_set_role = 'colors_set_role'
 }

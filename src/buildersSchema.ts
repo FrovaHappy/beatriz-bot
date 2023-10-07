@@ -1,6 +1,6 @@
 import type { BaseFileButton, BaseFileCommand } from './types/BaseFiles'
 type BuildCommandFile = Omit<BaseFileCommand, 'type'>
-type BuildButtonFile = Omit<BaseFileButton, 'type'>
+type BuildButtonFile = Omit<BaseFileButton, 'type' | 'scope'>
 export function BuildCommand(options: BuildCommandFile): BaseFileCommand {
   return {
     data: options.data,
@@ -16,8 +16,8 @@ export function BuildButton(options: BuildButtonFile): BaseFileButton {
     data: options.data,
     execute: options.execute,
     name: options.name,
-    scope: options.scope,
     type: 'button',
+    scope: 'public',
     cooldown: options.cooldown
   }
 }

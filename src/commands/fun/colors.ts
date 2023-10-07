@@ -31,10 +31,11 @@ export default BuildCommand({
         create: { serverId, accessCommand: 'public' },
         update: {}
       })
-      let role = (await interaction.guild?.roles.fetch(server.colorRoleId ?? '0')) ?? null
-      if (!role) role = await createRole(interaction)
+
+      const role = (await interaction.guild?.roles.fetch(server.colorRoleId ?? '')) ?? (await createRole(interaction))
+
       if (!role) return await interaction.editReply(messages.errorInRole)
-      await interaction.editReply(messages.runSetting)
+      await interaction.editReply(messages.runSetting(interaction))
     }
   }
 })
