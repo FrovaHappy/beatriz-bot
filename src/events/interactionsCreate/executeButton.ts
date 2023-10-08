@@ -2,7 +2,6 @@ import isCooldownEnable from '../../isCooldownEnable'
 import type { CustomButtonInteraction } from '../../types/InteractionsCreate'
 
 export default async function executeCommand(interaction: CustomButtonInteraction): Promise<unknown> {
-  console.log(interaction.client.buttons)
   const button = interaction.client.buttons.get(interaction.customId)
   if (!button) {
     console.error(`No command matching ${interaction.customId} was found.`)

@@ -12,6 +12,5 @@ export default {
     if (interaction.isButton()) {
       await executeButton(interaction)
     }
-    console.log(interaction.type)
   }
 }

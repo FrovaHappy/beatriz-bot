@@ -16,7 +16,6 @@ export default async function isCooldownEnable(
   const now = Date.now()
   try {
     const timestamps = cooldowns.get(cooldownName)
-    console.log(cooldowns)
     if (!timestamps) throw new Error(`Cannot find ${cooldownName} in cooldowns`)
     const defaultCooldownDuration = config.defaultCooldown
     const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000
