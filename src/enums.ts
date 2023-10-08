@@ -1,7 +1,7 @@
 export const enum CommandsNames {
   test = 'test',
   ping = 'ping',
-  colors = 'colors'
+  setColors = 'set-colors'
 }
 export const enum ButtonsNames {
   ping = 'ping',

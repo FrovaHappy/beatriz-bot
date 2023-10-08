@@ -4,20 +4,18 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import db from '../../db'
 import createRole from './colors/createRole'
 import messages from './colors/messages'
-const name = CommandsNames.colors
+const name = CommandsNames.setColors
 export default BuildCommand({
   cooldown: 30,
   name,
   scope: 'private',
   data: new SlashCommandBuilder()
     .setName(name)
-    .setDescription('Colors Here!')
-    .addSubcommand(subCommand =>
-      subCommand.setName('start').setDescription('Inicia la primera configuración de colores.')
-    )
+    .setDescription('Inicia la primera configuración de colores.')
+    .addRoleOption(roleOption => roleOption.setName('role').setDescription('rol requerido para /colors'))
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   async execute(interaction) {
-    if (interaction.options.getSubcommand() === 'start') {
+    if (interaction.commandName === name) {
       interaction.deferReply({ ephemeral: true })
       if (!interaction.appPermissions?.has([PermissionFlagsBits.ManageRoles])) {
         return await interaction.editReply(messages.requiredPermissions)
