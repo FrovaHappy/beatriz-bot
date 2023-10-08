@@ -22,11 +22,20 @@ enum Access {
 }
 
 model Server {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  serverId      String            @unique
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  serverId      String           @unique
   users         UsersOnServers[]
   accessCommand Access
+  colors        Color[]
   colorRoleId   String?
+}
+
+model Color {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  server   Server @relation(fields: [serverId], references: [id])
+  serverId String @db.ObjectId
+  colorId  String
+  hexColor String
 }
 
 model UsersOnServers {
