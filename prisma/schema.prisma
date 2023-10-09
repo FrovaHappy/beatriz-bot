@@ -27,7 +27,8 @@ model Server {
   users         UsersOnServers[]
   accessCommand Access
   colors        Color[]
-  colorRoleId   String?
+  colorRoleId   String? // role controller
+  roleColorPermission String // role permission for /colors
 }
 
 model Color {

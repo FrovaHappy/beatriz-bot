@@ -15,6 +15,7 @@ export default BuildCommand({
     .addRoleOption(roleOption => roleOption.setName('role').setDescription('rol requerido para /colors'))
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   async execute(interaction) {
+    const rolePermission = interaction.options.getRole('role', false)
     if (interaction.commandName === name) {
       interaction.deferReply({ ephemeral: true })
       if (!interaction.appPermissions?.has([PermissionFlagsBits.ManageRoles])) {
@@ -26,8 +27,8 @@ export default BuildCommand({
       }
       const server = await db.server.upsert({
         where: { serverId },
-        create: { serverId, accessCommand: 'public' },
-        update: {}
+        create: { serverId, accessCommand: 'public', roleColorPermission: rolePermission?.id ?? '0' },
+        update: { roleColorPermission: rolePermission?.id ?? '0' }
       })
 
       const role = (await interaction.guild?.roles.fetch(server.colorRoleId ?? '')) ?? (await createRole(interaction))
