@@ -3,7 +3,7 @@ import db from '../../db'
 import { ButtonsNames } from '../../enums'
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
 import createColorsRoles from './colorsSetPack/createColorRole'
-import COLORS from './colorsSetPack/stackColors'
+import COLORS from '../../shared/stackColors'
 import filtersColors from './colorsSetPack/filtersColors'
 const name = ButtonsNames.colors_set_pack
 export default BuildButton({

@@ -1,6 +1,6 @@
 import type { RolePosition } from 'discord.js'
 import type { CustomButtonInteraction } from '../../../types/InteractionsCreate'
-import { type Colors } from './stackColors'
+import { type Colors } from '../../../shared/stackColors'
 export interface ReturnData {
   guildId?: string
   colorsPushed: ColorsPushed[]

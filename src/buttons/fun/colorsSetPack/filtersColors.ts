@@ -1,6 +1,6 @@
 import type { Role } from 'discord.js'
 import type { CustomButtonInteraction } from '../../../types/InteractionsCreate'
-import type { Colors } from './stackColors'
+import type { Colors } from '../../../shared/stackColors'
 interface ColorsServers {
   id: string
   serverId: string
