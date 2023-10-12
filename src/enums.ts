@@ -6,6 +6,7 @@ export const enum CommandsNames {
 }
 export const enum ButtonsNames {
   ping = 'ping',
+  invite = 'invite',
   colors_set_pack = 'colors_set_pack',
   colors_set_role = 'colors_set_role'
 }

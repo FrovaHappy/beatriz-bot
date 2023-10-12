@@ -1,9 +1,12 @@
-import { SlashCommandBuilder } from 'discord.js'
+import { type GuildMemberRoleManager, SlashCommandBuilder } from 'discord.js'
 import { BuildCommand } from '../../buildersSchema'
 import { CommandsNames } from '../../enums'
 import COLORS from '../../shared/stackColors'
 import changeToColor from './colors/changeToColor'
 import removeRoleOfUser from './colors/removeRoleOfUser'
+import db from '../../db'
+import config from '../../config'
+import messages from './colors/messages'
 
 const name = CommandsNames.colors
 const regexColors = /^#([a-f0-9]{6})$/
@@ -31,20 +34,35 @@ export default BuildCommand({
       strOp.setName('hex-custom').setDescription('color personalizado.').setMinLength(7).setMaxLength(7)
     ),
   async execute(interaction) {
+    const server = await db.server.findUnique({
+      where: { serverId: interaction.guildId ?? '' },
+      include: { colors: true }
+    })
+    if (!server) return await interaction.editReply(messages.requireSettings({ interaction }))
     await interaction.deferReply({ ephemeral: true })
     const hexColor = interaction.options.getString('hex-color', true) as `#${string}`
     const hexCustom = interaction.options.getString('hex-custom', false)?.trim().toLowerCase() as `#${string}`
-    await removeRoleOfUser(interaction)
+    await removeRoleOfUser({ interaction, server })
     if (!hexCustom) {
-      if (hexColor === '#none') return await interaction.editReply({ content: 'color quitado' })
-      const colorResult = await changeToColor(hexColor, interaction)
-      return await interaction.editReply('color normal' + colorResult)
+      if (hexColor === '#none') return await interaction.editReply(messages.cleanRole({ interaction }))
+      const { hasSusses } = await changeToColor({ color: hexColor, interaction, server })
+      if (!hasSusses) return await interaction.editReply(messages.errorService({ interaction }))
+      return await interaction.editReply(messages.endingSusses({ color: hexColor, interaction }))
     }
     if (regexColors.test(hexCustom)) {
-      if (hexCustom === '#000000') return await interaction.editReply({ content: 'color invalid #000000' })
-      const colorResult = await changeToColor(hexCustom, interaction)
-      return await interaction.editReply('color valid' + colorResult)
+      const isRolePermission = (interaction.member?.roles as GuildMemberRoleManager).cache.has(
+        server.roleColorPermission
+      )
+      if (!isRolePermission && server.roleColorPermission !== config.roleUndefined) {
+        return await interaction.editReply(messages.requireSettings({ interaction }))
+      }
+      if (hexCustom === '#000000') {
+        return await interaction.editReply(messages.invalidColor({ interaction, color: hexCustom }))
+      }
+      const { hasSusses } = await changeToColor({ color: hexCustom, interaction, server })
+      if (!hasSusses) return await interaction.editReply(messages.errorService({ interaction }))
+      return await interaction.editReply(messages.endingSusses({ color: hexCustom, interaction }))
     }
-    await interaction.editReply(`\`${hexCustom}\` es un color invalido, formato:  \`#ffffff\``)
+    await interaction.editReply(messages.invalidColor({ interaction, color: hexCustom }))
   }
 })

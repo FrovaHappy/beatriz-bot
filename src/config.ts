@@ -13,6 +13,8 @@ const discordGuild = (): string[] => {
   }
 }
 export default {
+  roleUndefined: '0',
+  discordUrlInvite: process.env.DISCORD_URL_INVITE ?? 'https://discord.com/',
   discordToken: process.env.DISCORD_TOKEN ?? '',
   discordClient: process.env.DISCORD_CLIENT ?? '',
   discordGuild: discordGuild(),

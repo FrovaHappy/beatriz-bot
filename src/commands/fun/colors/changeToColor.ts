@@ -1,24 +1,27 @@
+import config from '../../../config'
 import db from '../../../db'
 import type { CustomCommandInteraction } from '../../../types/InteractionsCreate'
-
-export default async function changeToColor(
-  color: `#${string}`,
+import type { ServerWithColors } from '../../../types/database'
+interface Props {
+  color: `#${string}`
   interaction: CustomCommandInteraction
-): Promise<string | null> {
-  const server = await db.server.findUnique({
-    where: { serverId: interaction.guildId ?? '' },
-    include: { colors: true }
-  })
-  const coincidence = server?.colors.find(c => c.hexColor === color)
+  server: ServerWithColors
+}
+interface ReturnData {
+  hasCreated: boolean
+  hasSusses: boolean
+}
+export default async function changeToColor({ color, interaction, server }: Props): Promise<ReturnData> {
+  const coincidence = server.colors.find(c => c.hexColor === color)
+  const role = interaction.guild?.roles.cache.find(r => r.id === coincidence?.colorId ?? config.roleUndefined)
+  const colorController = interaction.guild?.roles.cache.find(r => r.id === server.colorRoleId ?? config.roleUndefined)
 
-  const role = interaction.guild?.roles.cache.find(r => r.id === coincidence?.colorId ?? '0')
-  const colorController = interaction.guild?.roles.cache.find(r => r.id === server?.colorRoleId ?? '0')
-  if (!colorController) return null
+  if (!colorController) return { hasCreated: false, hasSusses: false }
   if (role) {
     interaction.client.cooldowns.get('command-colors')?.delete(interaction.user.id)
     const user = interaction.user
     const member = await interaction.guild?.members.addRole({ user, role })
-    return member?.toString() ?? null
+    return { hasCreated: false, hasSusses: Boolean(member) }
   }
   const newRole = await interaction.guild?.roles.create({
     color,
@@ -26,7 +29,7 @@ export default async function changeToColor(
     mentionable: false,
     name: `color: ${color}`
   })
-  if (!newRole) return null
+  if (!newRole) return { hasCreated: false, hasSusses: false }
   await interaction.guild?.roles.setPosition(newRole, colorController.rawPosition)
   const user = interaction.user
   const member = await interaction.guild?.members.addRole({ user, role: newRole })
@@ -35,6 +38,6 @@ export default async function changeToColor(
     data: { colors: { create: { colorId: newRole.id, hexColor: color } } }
   })
 
-  if (!update) return null
-  return member?.toString() ?? null
+  if (!update || !member) return { hasCreated: true, hasSusses: false }
+  return { hasCreated: true, hasSusses: true }
 }
