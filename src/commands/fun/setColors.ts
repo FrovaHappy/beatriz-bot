@@ -8,7 +8,7 @@ const name = CommandsNames.setColors
 export default BuildCommand({
   cooldown: 30,
   name,
-  scope: 'private',
+  scope: 'public',
   data: new SlashCommandBuilder()
     .setName(name)
     .setDescription('Inicia la primera configuración de colores.')
