@@ -4,6 +4,7 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import db from '../../db'
 import createRole from './setColors/createRole'
 import messages from './setColors/messages'
+import config from '../../config'
 const name = CommandsNames.setColors
 export default BuildCommand({
   cooldown: 30,
@@ -28,10 +29,12 @@ export default BuildCommand({
       const server = await db.server.upsert({
         where: { serverId },
         create: { serverId, accessCommand: 'public', roleColorPermission: rolePermission?.id ?? '0' },
-        update: { roleColorPermission: rolePermission?.id ?? '0' }
+        update: { roleColorPermission: rolePermission?.id ?? config.roleUndefined }
       })
 
-      const role = (await interaction.guild?.roles.fetch(server.colorRoleId ?? '')) ?? (await createRole(interaction))
+      const role =
+        interaction.guild?.roles.cache.find(r => r.id === server.colorRoleId ?? config.roleUndefined) ??
+        (await createRole(interaction))
 
       if (!role) return await interaction.editReply(messages.errorInRole)
       await interaction.editReply(messages.runSetting(interaction))
