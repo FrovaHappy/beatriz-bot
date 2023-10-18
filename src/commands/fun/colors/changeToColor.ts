@@ -22,7 +22,10 @@ export default async function changeToColor({ color, interaction, server }: Prop
     const user = interaction.user
     const member = await interaction.guild?.members.addRole({ user, role })
     return { hasCreated: false, hasSusses: Boolean(member) }
+  } else if (coincidence) {
+    await db.color.delete({ where: { ...coincidence } })
   }
+
   const newRole = await interaction.guild?.roles.create({
     color,
     hoist: false,
