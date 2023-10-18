@@ -2,6 +2,8 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { BuildCommand } from '../../buildersSchema'
 import { CommandsNames } from '../../enums'
 import db from '../../db'
+import validatesRoles from './shared/validatesRoles'
+import messages from './colors/messages'
 const name = CommandsNames.colorsList
 export default BuildCommand({
   data: new SlashCommandBuilder().setName(name).setDescription('lista los colores del servidor.'),
@@ -13,6 +15,8 @@ export default BuildCommand({
       where: { serverId: interaction.guildId ?? '' },
       include: { colors: true }
     })
+    const { validColorMain } = validatesRoles(interaction, server)
+    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
     const colors = server?.colors ?? []
     let colorsUsage = 0
     colors.forEach(col => {
