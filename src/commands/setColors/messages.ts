@@ -1,7 +1,7 @@
 import { ActionRowBuilder, type ButtonBuilder, Colors, EmbedBuilder } from 'discord.js'
-import type { EditReplyConstructor } from '../../../types/UtilityTypes'
-import { type CustomCommandInteraction } from '../../../types/InteractionsCreate'
-import { ButtonsNames } from '../../../enums'
+import type { EditReplyConstructor } from '../../types/UtilityTypes'
+import { type CustomCommandInteraction } from '../../types/InteractionsCreate'
+import { ButtonsNames } from '../../enums'
 
 const requiredPermissions: EditReplyConstructor = {
   content: 'El bot requiere del permiso `Role Manager`, para efectuar esta operación'

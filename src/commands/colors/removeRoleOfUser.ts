@@ -1,7 +1,7 @@
 import type { Prisma } from '@prisma/client'
-import type { CustomCommandInteraction } from '../../../types/InteractionsCreate'
+import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
 import type { GuildMemberRoleManager } from 'discord.js'
-import type { ServerWithColors } from '../../../types/database'
+import type { ServerWithColors } from '../../types/database'
 type ReturnData = Prisma.ColorUncheckedCreateInput
 
 interface Props {

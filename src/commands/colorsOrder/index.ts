@@ -3,8 +3,8 @@ import { BuildCommand } from '../../buildersSchema'
 import { CommandsNames } from '../../enums'
 import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
 import db from '../../db'
-import validatesRoles from './shared/validatesRoles'
-import messages from './colors/messages'
+import validatesRoles from '../shared/validatesRoles'
+import messages from '../colors/messages'
 interface Positions {
   position: number
   role: RoleResolvable

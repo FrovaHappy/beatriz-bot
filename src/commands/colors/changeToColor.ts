@@ -1,7 +1,7 @@
-import config from '../../../config'
-import db from '../../../db'
-import type { CustomCommandInteraction } from '../../../types/InteractionsCreate'
-import type { ServerWithColors } from '../../../types/database'
+import config from '../../config'
+import db from '../../db'
+import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
+import type { ServerWithColors } from '../../types/database'
 interface Props {
   color: `#${string}`
   interaction: CustomCommandInteraction

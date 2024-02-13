@@ -1,6 +1,6 @@
 import { ActionRowBuilder, Colors, EmbedBuilder, resolveColor } from 'discord.js'
-import type { EditReplyConstructorFn } from '../../../types/UtilityTypes'
-import { ButtonsNames } from '../../../enums'
+import type { EditReplyConstructorFn } from '../../types/UtilityTypes'
+import { ButtonsNames } from '../../enums'
 interface EndingSusses {
   color: `#${string}`
 }

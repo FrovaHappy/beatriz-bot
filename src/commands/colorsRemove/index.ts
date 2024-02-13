@@ -1,10 +1,10 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import { BuildCommand } from '../../buildersSchema'
 import { CommandsNames } from '../../enums'
-import actionNoUsages from './colorsRemove/actionNoUsages'
+import actionNoUsages from './actionNoUsages'
 import db from '../../db'
-import messages from './colors/messages'
-import validatesRoles from './shared/validatesRoles'
+import messages from '../colors/messages'
+import validatesRoles from '../shared/validatesRoles'
 const name = CommandsNames.colorsRemove
 const enum Actions {
   noUsages = 'no-usages',

@@ -2,9 +2,9 @@ import { BuildButton } from '../../buildersSchema'
 import db from '../../db'
 import { ButtonsNames } from '../../enums'
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js'
-import createColorsRoles from './colorsSetPack/createColorRole'
+import createColorsRoles from './createColorRole'
 import COLORS from '../../shared/stackColors'
-import filtersColors from './colorsSetPack/filtersColors'
+import filtersColors from './filtersColors'
 const name = ButtonsNames.colors_set_pack
 export default BuildButton({
   name,

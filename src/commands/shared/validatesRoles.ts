@@ -1,6 +1,6 @@
-import config from '../../../config'
-import type { CustomCommandInteraction } from '../../../types/InteractionsCreate'
-import type { ServerWithColors } from '../../../types/database'
+import config from '../../config'
+import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
+import type { ServerWithColors } from '../../types/database'
 interface ReturnData {
   validColorMain: boolean
   validColorPermission: boolean

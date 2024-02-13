@@ -1,6 +1,6 @@
-import db from '../../../db'
-import type { CustomCommandInteraction } from '../../../types/InteractionsCreate'
-import type { ServerWithColors } from '../../../types/database'
+import db from '../../db'
+import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
+import type { ServerWithColors } from '../../types/database'
 interface Result {
   delForUndefined: number
   deleteForNoUsages: number

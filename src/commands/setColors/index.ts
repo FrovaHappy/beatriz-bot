@@ -2,8 +2,8 @@ import { BuildCommand } from '../../buildersSchema'
 import { CommandsNames } from '../../enums'
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js'
 import db from '../../db'
-import createRole from './setColors/createRole'
-import messages from './setColors/messages'
+import createRole from './createRole'
+import messages from './messages'
 import config from '../../config'
 const name = CommandsNames.setColors
 export default BuildCommand({
