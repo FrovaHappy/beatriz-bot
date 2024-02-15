@@ -1,0 +1,41 @@
+{
+  "background": null,
+  "height": 300,
+  "width": 500,
+  "colorDominate": null,
+  "layers": [
+    {
+      "x": 80,
+      "y": 100,
+      "type": "name",
+      "color": null,
+      "size": 24,
+      "family": "Roboto Bold",
+      "weight": 700,
+      "nameType": "username"
+    },
+    {
+      "x": 80,
+      "y": 200,
+      "type": "text",
+      "size": 24,
+      "color": null,
+      "family": "Inter",
+      "weight": 700,
+      "content": "Welcome to Prueba"
+    },
+    {
+      "type": "icon",
+      "height": 40,
+      "width": 40,
+      "color": null,
+      "x": 20,
+      "y": 20,
+      "sheight": 40,
+      "swidth": 40,
+      "sx": 0,
+      "sy": 0,
+      "shared": "circle"
+    }
+  ]
+}

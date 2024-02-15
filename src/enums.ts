@@ -1,5 +1,6 @@
 export const enum CommandsNames {
   test = 'test',
+  setWelcome = 'set-welcome',
   ping = 'ping',
   colors = 'colors',
   setColors = 'set-colors',
