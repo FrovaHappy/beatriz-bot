@@ -1,5 +1,6 @@
 import type z from 'zod'
 import { any, array, number, object, record, string } from 'zod'
+const LIMIT_NUMBER = 1024
 const COLOR = string()
   .regex(/^#([a-f0-9]{6})$/, 'required hex valid with six numbers')
   .nullable()
@@ -7,42 +8,45 @@ const COLOR = string()
 const baseSchema = object({
   type: string().regex(/^(image|icon|name|text)$/),
   color: COLOR,
-  height: number(),
-  width: number(),
-  x: number(),
-  y: number()
+  height: number().positive().max(LIMIT_NUMBER),
+  width: number().positive().max(LIMIT_NUMBER),
+  x: number().positive().max(LIMIT_NUMBER),
+  y: number().positive().max(LIMIT_NUMBER)
 }).strict()
-
-const imageSchema = baseSchema
-  .extend({
-    background: COLOR,
-    img: string().url(),
-    sheight: number(),
-    swidth: number(),
-    sx: number(),
-    sy: number()
-  })
-  .strict()
 
 const textSchema = baseSchema
   .omit({ height: true, width: true })
   .extend({
-    size: number(),
+    size: number().positive().max(LIMIT_NUMBER),
     family: string(),
-    weight: number(),
-    content: string()
-  })
-  .strict()
-
-const iconSchema = imageSchema
-  .omit({ background: true, img: true })
-  .extend({
-    shared: string()
+    weight: number().positive().max(1000).default(400),
+    limitLetters: number().positive().max(LIMIT_NUMBER).default(0),
+    content: string(),
+    align: string()
+      .regex(/^(start|end|left|right|center)$/)
+      .default('start'),
+    baseline: string()
+      .regex(/^(top|hanging|middle|alphabetic|ideographic|bottom)$/)
+      .default('alphabetic')
   })
   .strict()
 const nameSchema = textSchema.omit({ content: true }).extend({
   nameType: string().regex(/^(globalName|id|username)$/)
 })
+
+const imageSchema = baseSchema
+  .extend({
+    img: string().url()
+  })
+  .strict()
+
+const iconSchema = imageSchema
+  .omit({ img: true })
+  .extend({
+    shape: string().regex(/^(circle|square(5|10|15){0,1})$/)
+  })
+  .strict()
+
 const canvasSchema = object({
   background: COLOR,
   height: number(),
