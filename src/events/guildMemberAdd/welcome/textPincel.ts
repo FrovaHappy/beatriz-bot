@@ -30,7 +30,6 @@ export default async function namePencil({ member, text, colorDominate, ctx }: P
   while (text.limitLetters < lengthLetters.width && text.limitLetters !== 0) {
     textClipping = textClipping.slice(0, -1)
     lengthLetters = ctx.measureText(textClipping)
-    console.log(lengthLetters.width, text.limitLetters)
   }
   ctx.fillText(textClipping, text.x, text.y)
   return ctx
