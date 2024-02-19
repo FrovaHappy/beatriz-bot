@@ -52,7 +52,7 @@ const canvasSchema = object({
   height: number(),
   width: number(),
   colorDominate: COLOR,
-  layers: array(record(string(), any()))
+  layers: array(record(string(), any())).length(15)
 })
 
 export const imageZod = imageSchema
