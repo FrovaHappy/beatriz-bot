@@ -18,25 +18,26 @@ export default BuildCommand({
   name,
   scope: 'public',
   cooldown: 60,
-  async execute(interaction: CustomCommandInteraction) {
-    await interaction.deferReply({ ephemeral: true })
-    const server = await db.server.findUnique({
-      where: { serverId: interaction.guildId ?? '' },
+  async execute(i: CustomCommandInteraction) {
+    const colorCommand = await db.colorCommand.findUnique({
+      where: { serverId: i.guildId ?? '' },
       include: { colors: true }
     })
-    const { validColorMain } = validatesRoles(interaction, server)
-    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
+    if (!colorCommand) return await i.editReply(messages.requireSettings({ interaction: i }))
+    const { validColorMain } = validatesRoles(i, colorCommand)
+    if (!validColorMain) return await i.editReply(messages.requireSettings({ interaction: i }))
 
-    const colors = server?.colors ?? []
-    const colorMain = interaction.guild?.roles.cache.find(r => r.id === server?.colorRoleId) as Role
+    const { colors, pointerId } = colorCommand
+    const colorMain = i.guild?.roles.cache.find(r => r.id === pointerId) as Role
     const positions: Positions[] = []
+
     for await (const color of colors) {
-      const role = interaction.guild?.roles.cache.find(r => r.id === color.colorId)
+      const role = i.guild?.roles.cache.find(r => r.id === color.colorId)
       if (role) positions.push({ position: colorMain.rawPosition, role })
       if (!role) await db.color.delete({ where: color })
     }
-    await interaction.guild?.roles.setPositions(positions)
+    await i.guild?.roles.setPositions(positions)
 
-    return await interaction.editReply({ content: `Roles ordenados en la position ${colorMain.rawPosition}` })
+    return await i.editReply({ content: `Roles ordenados en la position ${colorMain.rawPosition}` })
   }
 })

@@ -15,29 +15,31 @@ export default BuildCommand({
     .setDescription('Inicia la primera configuración de colores.')
     .addRoleOption(roleOption => roleOption.setName('role').setDescription('rol requerido para /colors'))
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-  async execute(interaction) {
-    const rolePermission = interaction.options.getRole('role', false)
-    if (interaction.commandName === name) {
-      interaction.deferReply({ ephemeral: true })
-      if (!interaction.appPermissions?.has([PermissionFlagsBits.ManageRoles])) {
-        return await interaction.editReply(messages.requiredPermissions)
-      }
-      const serverId = interaction.guildId
-      if (!serverId) {
-        return await interaction.editReply(messages.serverIdNotFound)
-      }
-      const server = await db.server.upsert({
-        where: { serverId },
-        create: { serverId, accessCommand: 'public', roleColorPermission: rolePermission?.id ?? '0' },
-        update: { roleColorPermission: rolePermission?.id ?? config.roleUndefined }
-      })
+  async execute(i) {
+    const rolePermission = i.options.getRole('role', false)?.id ?? null
 
-      const role =
-        interaction.guild?.roles.cache.find(r => r.id === server.colorRoleId ?? config.roleUndefined) ??
-        (await createRole(interaction))
+    if (!(i.commandName === name)) return await i.editReply('error: command loaded incorrectly')
 
-      if (!role) return await interaction.editReply(messages.errorInRole)
-      await interaction.editReply(messages.runSetting(interaction))
+    if (!i.appPermissions?.has([PermissionFlagsBits.ManageRoles])) {
+      return await i.editReply(messages.requiredPermissions)
     }
+    const serverId = i.guildId
+    if (!serverId) {
+      return await i.editReply('server not found')
+    }
+    const { pointerId } =
+      (await db.colorCommand.findUnique({
+        where: { serverId }
+      })) ?? {}
+
+    const role = i.guild?.roles.cache.find(r => r.id === pointerId ?? config.roleUndefined) ?? (await createRole(i))
+
+    if (!role) return await i.editReply('no se pudo crear/encontrar el role')
+    await db.colorCommand.upsert({
+      where: { serverId },
+      create: { pointerId: role.id, serverId, rolePermission },
+      update: { pointerId, rolePermission }
+    })
+    await i.editReply('role pointer creado')
   }
 })

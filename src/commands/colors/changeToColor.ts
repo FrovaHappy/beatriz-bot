@@ -1,43 +1,43 @@
+import { type Color } from '@prisma/client'
 import config from '../../config'
 import db from '../../db'
 import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
-import type { ServerWithColors } from '../../types/database'
 interface Props {
   color: `#${string}`
   interaction: CustomCommandInteraction
-  server: ServerWithColors
+  colors: Color[]
+  pointerId: string
 }
 interface ReturnData {
   hasCreated: boolean
   hasSusses: boolean
 }
-export default async function changeToColor({ color, interaction, server }: Props): Promise<ReturnData> {
-  const coincidence = server.colors.find(c => c.hexColor === color)
-  const role = interaction.guild?.roles.cache.find(r => r.id === coincidence?.colorId ?? config.roleUndefined)
-  const colorController = interaction.guild?.roles.cache.find(r => r.id === server.colorRoleId ?? config.roleUndefined)
+export default async function changeToColor({ color, interaction, colors, pointerId }: Props): Promise<ReturnData> {
+  const { guild, client, user, guildId } = interaction
+  const coincidence = colors.find(c => c.hexColor === color)
+  const role = guild?.roles.cache.find(r => r.id === coincidence?.colorId ?? config.roleUndefined)
+  const colorController = guild?.roles.cache.find(r => r.id === pointerId)
 
   if (!colorController) return { hasCreated: false, hasSusses: false }
   if (role) {
-    interaction.client.cooldowns.get('command-colors')?.delete(interaction.user.id)
-    const user = interaction.user
-    const member = await interaction.guild?.members.addRole({ user, role })
+    client.cooldowns.get('command-colors')?.delete(user.id)
+    const member = await guild?.members.addRole({ user, role })
     return { hasCreated: false, hasSusses: Boolean(member) }
   } else if (coincidence) {
-    await db.color.delete({ where: { ...coincidence } })
+    await db.color.delete({ where: coincidence })
   }
 
-  const newRole = await interaction.guild?.roles.create({
+  const newRole = await guild?.roles.create({
     color,
     hoist: false,
     mentionable: false,
     name: `color: ${color}`
   })
   if (!newRole) return { hasCreated: false, hasSusses: false }
-  await interaction.guild?.roles.setPosition(newRole, colorController.rawPosition)
-  const user = interaction.user
-  const member = await interaction.guild?.members.addRole({ user, role: newRole })
-  const update = await db.server.update({
-    where: { serverId: interaction.guildId ?? '' },
+  await guild?.roles.setPosition(newRole, colorController.rawPosition)
+  const member = await guild?.members.addRole({ user, role: newRole })
+  const update = await db.colorCommand.update({
+    where: { serverId: guildId ?? '' },
     data: { colors: { create: { colorId: newRole.id, hexColor: color } } }
   })
 

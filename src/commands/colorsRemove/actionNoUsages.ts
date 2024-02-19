@@ -1,15 +1,11 @@
+import { type Color } from '@prisma/client'
 import db from '../../db'
 import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
-import type { ServerWithColors } from '../../types/database'
 interface Result {
   delForUndefined: number
   deleteForNoUsages: number
 }
-export default async function actionNoUsages(
-  interaction: CustomCommandInteraction,
-  server: ServerWithColors | null
-): Promise<Result> {
-  const colors = server?.colors ?? []
+export default async function actionNoUsages(interaction: CustomCommandInteraction, colors: Color[]): Promise<Result> {
   const result: Result = {
     delForUndefined: 0,
     deleteForNoUsages: 0

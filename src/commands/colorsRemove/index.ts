@@ -27,17 +27,19 @@ export default BuildCommand({
   cooldown: 3 * 60 * 60,
   scope: 'public',
   async execute(interaction) {
-    await interaction.deferReply({ ephemeral: true })
-    const server = await db.server.findUnique({
+    const colorCommand = await db.colorCommand.findUnique({
       where: { serverId: interaction.guildId ?? '' },
       include: { colors: true }
     })
-    const { validColorMain } = validatesRoles(interaction, server)
-    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
 
+    if (!colorCommand) return await interaction.editReply(messages.requireSettings({ interaction }))
+
+    const { validColorMain } = validatesRoles(interaction, colorCommand)
+    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
+    const { colors } = colorCommand
     const action = interaction.options.getString('actions')
     if (action === Actions.noUsages) {
-      const result = await actionNoUsages(interaction, server)
+      const result = await actionNoUsages(interaction, colors)
       return await interaction.editReply({
         content: `
         Roles no usados eliminados: ${result.deleteForNoUsages}

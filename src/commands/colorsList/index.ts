@@ -10,14 +10,16 @@ export default BuildCommand({
   name,
   scope: 'public',
   async execute(interaction) {
-    await interaction.deferReply({ ephemeral: true })
-    const server = await db.server.findUnique({
+    const colorCommand = await db.colorCommand.findUnique({
       where: { serverId: interaction.guildId ?? '' },
       include: { colors: true }
     })
-    const { validColorMain } = validatesRoles(interaction, server)
+
+    if (!colorCommand) return await interaction.editReply(messages.requireSettings({ interaction }))
+    const { validColorMain } = validatesRoles(interaction, colorCommand)
     if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
-    const colors = server?.colors ?? []
+
+    const colors = colorCommand.colors ?? []
     let colorsUsage = 0
     colors.forEach(col => {
       const roleGuild = interaction.guild?.roles.cache.get(col.colorId)
