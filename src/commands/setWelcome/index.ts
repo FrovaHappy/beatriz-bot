@@ -10,6 +10,7 @@ const name = CommandsNames.setWelcome
 export default BuildCommand({
   cooldown: 0,
   name,
+  ephemeral: true,
   scope: 'private',
   data: new SlashCommandBuilder().setName(name).setDescription('Replies with Pong!'),
   async execute(interaction) {

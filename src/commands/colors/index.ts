@@ -12,6 +12,7 @@ const regexColors = /^#([a-f0-9]{6})$/
 
 export default BuildCommand({
   name,
+  ephemeral: true,
   scope: 'public',
   cooldown: 15,
   data: new SlashCommandBuilder()

@@ -8,6 +8,7 @@ import config from '../../config'
 const name = CommandsNames.setColors
 export default BuildCommand({
   cooldown: 30,
+  ephemeral: true,
   name,
   scope: 'public',
   data: new SlashCommandBuilder()

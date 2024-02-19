@@ -16,6 +16,7 @@ export default BuildCommand({
     .setDescription('Ordena los roles ya creados.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
   name,
+  ephemeral: true,
   scope: 'public',
   cooldown: 60,
   async execute(i: CustomCommandInteraction) {

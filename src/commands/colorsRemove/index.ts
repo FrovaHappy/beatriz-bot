@@ -25,6 +25,7 @@ export default BuildCommand({
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles),
   cooldown: 3 * 60 * 60,
+  ephemeral: true,
   scope: 'public',
   async execute(interaction) {
     const colorCommand = await db.colorCommand.findUnique({
