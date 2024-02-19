@@ -7,6 +7,7 @@ export function BuildCommand(options: BuildCommandFile): BaseFileCommand {
     name: options.name,
     scope: options.scope,
     cooldown: options.cooldown,
+    ephemeral: options.ephemeral ?? false,
     type: 'command',
     execute: options.execute
   }
@@ -16,6 +17,7 @@ export function BuildButton(options: BuildButtonFile): BaseFileButton {
     data: options.data,
     execute: options.execute,
     name: options.name,
+    ephemeral: options.ephemeral ?? false,
     type: 'button',
     scope: 'public',
     cooldown: options.cooldown

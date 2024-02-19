@@ -13,4 +13,5 @@ export interface BaseEventInteractionCreate {
   type: 'command' | 'button'
   scope: 'public' | 'private' | 'owner'
   cooldown?: number
+  ephemeral?: boolean
 }

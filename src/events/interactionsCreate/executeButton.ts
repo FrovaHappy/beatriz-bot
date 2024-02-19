@@ -1,4 +1,5 @@
 import isCooldownEnable from '../../isCooldownEnable'
+import createServerDb from '../../shared/createServerDb'
 import type { CustomButtonInteraction } from '../../types/InteractionsCreate'
 
 export default async function executeCommand(interaction: CustomButtonInteraction): Promise<unknown> {
@@ -8,8 +9,12 @@ export default async function executeCommand(interaction: CustomButtonInteractio
     return
   }
 
+  interaction.deferReply({ ephemeral: button.ephemeral })
+  const serverId = interaction.guild?.id
+  if (serverId) await createServerDb(serverId)
+
   const messageCooldown = await isCooldownEnable(interaction, button)
-  if (messageCooldown) return await interaction.reply({ content: messageCooldown, ephemeral: true })
+  if (messageCooldown) return await interaction.editReply({ content: messageCooldown })
 
   try {
     await button.execute(interaction)
