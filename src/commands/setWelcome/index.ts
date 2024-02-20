@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js'
-import { CommandsNames } from '../../enums'
+import { CommandsNames, WelcomeOptions } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -17,6 +17,17 @@ export default BuildCommand({
     .setDescription('Setting the welcome of this server.')
     .addChannelOption(op =>
       op.setName('channel').setDescription('Channel where welcomes will be sent.').setRequired(true)
+    )
+    .addStringOption(op =>
+      op
+        .setName('send')
+        .setDescription('Choose how the welcome will be sent.')
+        .addChoices(
+          { name: 'alone message', value: WelcomeOptions.aloneMessage },
+          { name: 'Alone Image', value: WelcomeOptions.aloneImage },
+          { name: 'All', value: WelcomeOptions.all }
+        )
+        .setRequired(true)
     )
     .addStringOption(op => op.setName('message').setDescription('Customize the welcome message').setRequired(false))
     .addStringOption(op =>
