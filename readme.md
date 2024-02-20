@@ -1,6 +1,8 @@
 # Beatriz-Bot
 Un bot multi-herramientas para mejorar la experiencia de discord
 
+* [ER diagram Database](https://lucid.app/lucidchart/da082022-5f26-47bf-8acb-a496613683e9/edit?viewport_loc=159%2C94%2C1779%2C852%2C0_0&invitationId=inv_938d3df7-30f9-49ae-95a8-f480185cb1f7)
+
 ## instalación
 ```bash
 npm install
