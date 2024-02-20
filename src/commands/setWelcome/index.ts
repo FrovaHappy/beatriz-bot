@@ -1,10 +1,11 @@
 import { SlashCommandBuilder } from 'discord.js'
-import { CommandsNames, WelcomeOptions } from '../../enums'
+import { CommandsNames } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { validateCanvas } from './validate'
 import { formatZodError } from '../../shared/validate'
+import { SendWelcome } from '@prisma/client'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -23,9 +24,10 @@ export default BuildCommand({
         .setName('send')
         .setDescription('Choose how the welcome will be sent.')
         .addChoices(
-          { name: 'alone message', value: WelcomeOptions.aloneMessage },
-          { name: 'Alone Image', value: WelcomeOptions.aloneImage },
-          { name: 'All', value: WelcomeOptions.all }
+          { name: 'alone message', value: SendWelcome.alone_message },
+          { name: 'Alone Image', value: SendWelcome.alone_image },
+          { name: 'none', value: SendWelcome.none },
+          { name: 'All', value: SendWelcome.all }
         )
         .setRequired(true)
     )
