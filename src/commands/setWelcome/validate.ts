@@ -1,9 +1,11 @@
 import type z from 'zod'
-import { any, array, number, object, record, string } from 'zod'
+import { type ZodObject, any, array, number, object, record, string } from 'zod'
+import validate from '../../shared/validate'
 const LIMIT_NUMBER = 1024
 const COLOR = string()
-  .regex(/^#([a-f0-9]{6})$/, 'required hex valid with six numbers')
-  .nullable()
+  .regex(/^(#[a-fA-F0-9]{6}|transparent)$/, 'required hex valid with six numbers')
+  .optional()
+  .nullish()
 
 const baseSchema = object({
   type: string().regex(/^(image|icon|name|text)$/),
@@ -20,7 +22,7 @@ const textSchema = baseSchema
     size: number().positive().max(LIMIT_NUMBER),
     family: string(),
     weight: number().positive().max(1000).default(400),
-    limitLetters: number().positive().max(LIMIT_NUMBER).default(0),
+    limitLetters: number().int().min(0).max(LIMIT_NUMBER).default(0),
     content: string(),
     align: string()
       .regex(/^(start|end|left|right|center)$/)
@@ -35,15 +37,15 @@ const nameSchema = textSchema.omit({ content: true }).extend({
 })
 
 const imageSchema = baseSchema
+  .omit({ color: true })
   .extend({
     img: string().url()
   })
   .strict()
 
-const iconSchema = imageSchema
-  .omit({ img: true })
+const iconSchema = baseSchema
   .extend({
-    shape: string().regex(/^(circle|square(5|10|15){0,1})$/)
+    shape: string().regex(/^(circle|square(5|10|15|20){0,1})$/)
   })
   .strict()
 
@@ -52,7 +54,7 @@ const canvasSchema = object({
   height: number(),
   width: number(),
   colorDominate: COLOR,
-  layers: array(record(string(), any())).length(15)
+  layers: array(record(string(), any())).min(0).max(15)
 })
 
 export const imageZod = imageSchema
@@ -67,13 +69,19 @@ export type Icon = z.infer<typeof iconZod>
 export type Text = z.infer<typeof textZod>
 export type Canvas = z.infer<typeof canvasZod>
 
+const types: Record<string, ZodObject<any>> = {
+  name: nameZod,
+  text: textZod,
+  icon: iconZod,
+  image: imageZod
+}
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function obtainType(type: 'name' | 'icon' | 'text' | 'image') {
-  const types = {
-    name: nameZod,
-    text: textZod,
-    icon: iconZod,
-    image: imageZod
+export function validateCanvas(data: any) {
+  const invalidObj = validate(data, canvasZod) ?? false
+  if (invalidObj) return invalidObj
+  for (const layer of data.layers) {
+    const typeZod = types[layer.type] ?? null
+    const invalidLayer = validate(layer, typeZod)
+    if (invalidLayer) return invalidLayer
   }
-  return types[type] ?? null
 }

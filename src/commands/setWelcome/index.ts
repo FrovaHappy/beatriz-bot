@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js'
 import { CommandsNames } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
-import validate from '../../shared/validate'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { canvasZod, obtainType } from './validate'
+import { validateCanvas } from './validate'
+import { formatZodError } from '../../shared/validate'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -12,18 +12,26 @@ export default BuildCommand({
   name,
   ephemeral: true,
   scope: 'private',
-  data: new SlashCommandBuilder().setName(name).setDescription('Replies with Pong!'),
-  async execute(interaction) {
-    if (!interaction.guildId) return
+  data: new SlashCommandBuilder()
+    .setName(name)
+    .setDescription('Setting the welcome of this server.')
+    .addChannelOption(op =>
+      op.setName('channel').setDescription('Channel where welcomes will be sent.').setRequired(true)
+    )
+    .addStringOption(op => op.setName('message').setDescription('Customize the welcome message').setRequired(false))
+    .addStringOption(op =>
+      op.setName('image').setDescription('Customize the welcome image, se espera un formato JSON.').setRequired(false)
+    ),
+  async execute(i) {
+    const image = i.options.getString('image')
+    const message = i.options.getString('message')
+    const channel = i.options.getChannel('channel', true)
+    console.log(message, channel.id, image?.slice(0, 50))
+    if (!i.guildId) return
     const mock = JSON.parse(readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8'))
-    const invalidObj = validate(mock, canvasZod) ?? false
-    if (invalidObj) return await interaction.reply({ content: JSON.stringify(invalidObj).slice(0, 2000) })
-    for (const layer of mock.layers) {
-      const typeZod = obtainType(layer.type)
-      const invalidLayer = validate(layer, typeZod)
-      console.log(invalidLayer)
-      if (invalidLayer) return await interaction.reply({ content: JSON.stringify(invalidLayer).slice(0, 2000) })
-    }
-    await interaction.reply({ content: 'test!' })
+    const invalidJson = validateCanvas(mock)
+    console.log(invalidJson)
+    if (invalidJson) return await i.editReply({ content: formatZodError(invalidJson) })
+    await i.editReply({ content: 'data valid' })
   }
 })
