@@ -6,6 +6,9 @@ import path from 'node:path'
 import { validateCanvas } from './validate'
 import { formatZodError } from '../../shared/validate'
 import { SendWelcome } from '@prisma/client'
+import messageFormatting from '../shared/messageFormatting'
+import db from '../../db'
+import { stringToJson } from '../../shared/general'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -36,15 +39,31 @@ export default BuildCommand({
       op.setName('image').setDescription('Customize the welcome image, se espera un formato JSON.').setRequired(false)
     ),
   async execute(i) {
-    const image = i.options.getString('image')
-    const message = i.options.getString('message')
-    const channel = i.options.getChannel('channel', true)
-    console.log(message, channel.id, image?.slice(0, 50))
-    if (!i.guildId) return
-    const mock = JSON.parse(readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8'))
-    const invalidJson = validateCanvas(mock)
-    console.log(invalidJson)
+    const serverId = i.guild?.id
+    if (!serverId) return await i.editReply({ content: 'error with server id' })
+    const image = stringToJson(
+      i.options.getString('image') ?? readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8')
+    )
+    const message = i.options.getString('message') ?? 'welcome <user_name> with you we are <user_count>.'
+    const channelId = i.options.getChannel('channel', true).id
+    const send = i.options.getString('send', true) as SendWelcome
+
+    const invalidJson = validateCanvas(image)
     if (invalidJson) return await i.editReply({ content: formatZodError(invalidJson) })
-    await i.editReply({ content: 'data valid' })
+    const messageReply = messageFormatting(message, {
+      userName: i.user.username,
+      userGlobal: i.user.globalName ?? '<error UserGlobal>',
+      userId: i.user.id,
+      userCount: i.guild?.memberCount.toString() ?? '<Error Count>'
+    })
+    await db.server.update({
+      where: { serverId },
+      data: {
+        welcome: {
+          upsert: { create: { channelId, message, send, image }, update: { channelId, message, send, image } }
+        }
+      }
+    })
+    await i.editReply({ content: messageReply })
   }
 })
