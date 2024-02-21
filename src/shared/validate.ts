@@ -1,7 +1,7 @@
 import { ZodError, type ZodIssue, type ZodObject } from 'zod'
 interface DataError {
   issues: ZodIssue[]
-  type: string
+  type?: string
 }
 /**
  * @returns returns a ZodIssue array object if find an problem
@@ -21,7 +21,7 @@ export function formatZodError(data: DataError): string {
   const { type, issues } = data
   for (const e of issues) {
     const path = e.path.length === 0 ? '?' : e.path.join('.')
-    str += `* ${type} in ${path} -> ${e.message}`
+    str += `* ${type ?? 'JSON'}.${path} -> ${e.message} \n`
   }
   return str
 }
