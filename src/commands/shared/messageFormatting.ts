@@ -1,13 +1,14 @@
-interface Props {
-  color: string
+const rules = {
+  color: '<color>',
+  userName: '<user_name>',
+  userGlobal: '<user_global>',
+  userCount: '<user_count>',
+  userId: '<user_id>'
 }
-export default function messageFormatting(str: string, formats: Partial<Props>): string {
+export default function messageFormatting(str: string, formats: Partial<typeof rules>): string {
   const formatsKeys = Object.keys(formats)
-  const rules: Props = {
-    color: '<color>'
-  }
   for (const fk of formatsKeys) {
-    str = str.replaceAll(rules[fk as keyof Props], formats[fk as keyof Partial<Props>] ?? '')
+    str = str.replaceAll(rules[fk as keyof typeof rules], formats[fk as keyof Partial<typeof rules>] ?? '')
   }
   return str
 }
