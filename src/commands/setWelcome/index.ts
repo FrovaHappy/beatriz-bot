@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js'
+import { type GuildMember, SlashCommandBuilder } from 'discord.js'
 import { CommandsNames } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
 import { readFileSync } from 'node:fs'
@@ -9,6 +9,7 @@ import { SendWelcome } from '@prisma/client'
 import messageFormatting from '../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
+import buildWelcomeImage from '../../shared/buildWelcomeImage'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -64,6 +65,13 @@ export default BuildCommand({
         }
       }
     })
-    await i.editReply({ content: messageReply })
+    const canSend = {
+      image: send === SendWelcome.alone_image || send === SendWelcome.all,
+      message: send === SendWelcome.alone_message || send === SendWelcome.all
+    }
+    const content = canSend.message ? messageReply : undefined
+    const files = []
+    if (image && i.member && canSend.image) files.push(await buildWelcomeImage(image, i.member as GuildMember))
+    await i.editReply({ content, files })
   }
 })
