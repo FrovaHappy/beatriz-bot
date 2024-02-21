@@ -1,5 +1,5 @@
 import { type GuildMember } from 'discord.js'
-import { type Text, type Name } from '../../../commands/setWelcome/validate'
+import { type Text, type Name } from '../../commands/setWelcome/validate'
 import { type SKRSContext2D } from '@napi-rs/canvas'
 interface Props {
   text: Name | Text

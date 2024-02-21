@@ -1,5 +1,5 @@
 import { type Canvas, createCanvas, loadImage } from '@napi-rs/canvas'
-import { type Icon } from '../../../commands/setWelcome/validate'
+import { type Icon } from '../../commands/setWelcome/validate'
 import { type GuildMember } from 'discord.js'
 import shapes from './shapes'
 

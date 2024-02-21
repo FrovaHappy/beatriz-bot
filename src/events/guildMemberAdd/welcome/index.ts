@@ -2,7 +2,7 @@ import { type Webhook, type GuildMember } from 'discord.js'
 import { type Canvas } from '../../../commands/setWelcome/validate'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import buildWelcomeImage from './buildWelcomeImage'
+import buildWelcomeImage from '../../../shared/buildWelcomeImage'
 interface Options {
   channelId: string
 }

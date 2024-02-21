@@ -1,5 +1,5 @@
 import { createCanvas } from '@napi-rs/canvas'
-import { type Canvas } from '../../../commands/setWelcome/validate'
+import { type Canvas } from '../../commands/setWelcome/validate'
 import iconPencil from './iconPencil'
 import { AttachmentBuilder, type GuildMember } from 'discord.js'
 import textPencil from './textPincel'

@@ -1,5 +1,5 @@
 import { type Image, createCanvas, type Canvas, Path2D } from '@napi-rs/canvas'
-import { type Icon } from '../../../commands/setWelcome/validate'
+import { type Icon } from '../../commands/setWelcome/validate'
 
 interface Props {
   icon: Icon
