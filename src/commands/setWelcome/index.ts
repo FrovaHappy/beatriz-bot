@@ -9,7 +9,7 @@ import { SendWelcome } from '@prisma/client'
 import messageFormatting from '../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
-import buildWelcomeImage from '../../shared/buildWelcomeImage'
+import SendWelcomeWith from '../../shared/sendWelcomeWith'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -42,14 +42,13 @@ export default BuildCommand({
   async execute(i) {
     const serverId = i.guild?.id
     if (!serverId) return await i.editReply({ content: 'error with server id' })
-    const image = stringToJson(
-      i.options.getString('image') ?? readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8')
-    )
+    const image = stringToJson(i.options.getString('image') ?? '')
+    const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8'))
     const message = i.options.getString('message') ?? 'welcome <user_name> with you we are <user_count>.'
     const channelId = i.options.getChannel('channel', true).id
     const send = i.options.getString('send', true) as SendWelcome
 
-    const invalidJson = validateCanvas(image)
+    const invalidJson = image ? validateCanvas(image) : undefined
     if (invalidJson) return await i.editReply({ content: formatZodError(invalidJson) })
     const messageReply = messageFormatting(message, {
       userName: i.user.username,
@@ -65,13 +64,9 @@ export default BuildCommand({
         }
       }
     })
-    const canSend = {
-      image: send === SendWelcome.alone_image || send === SendWelcome.all,
-      message: send === SendWelcome.alone_message || send === SendWelcome.all
-    }
-    const content = canSend.message ? messageReply : undefined
-    const files = []
-    if (image && i.member && canSend.image) files.push(await buildWelcomeImage(image, i.member as GuildMember))
-    await i.editReply({ content, files })
+
+    await i.editReply(
+      await SendWelcomeWith({ image: image ?? imageMock, message: messageReply, member: i.member as GuildMember, send })
+    )
   }
 })
