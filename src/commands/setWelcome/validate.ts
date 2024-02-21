@@ -77,7 +77,7 @@ const types: Record<string, ZodObject<any>> = {
 }
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function validateCanvas(data: any) {
-  const invalidObj = validate(data, canvasZod) ?? false
+  const invalidObj = validate(data ?? {}, canvasZod) ?? false
   if (invalidObj) return invalidObj
   for (const layer of data.layers) {
     const typeZod = types[layer.type] ?? null
