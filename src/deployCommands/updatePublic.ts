@@ -4,14 +4,14 @@ import config from '../config'
 const rest = new REST().setToken(config.discordToken)
 
 export default async function updatePublic(commands: any[]): Promise<void> {
+  console.log('\nDeploy Public Commands started ...')
   try {
-    console.log(`·  Public | Started | ${commands.length} application (/) commands.`)
     const data = (await rest.put(Routes.applicationCommands(config.discordClient), {
       body: commands
     })) as any[]
 
-    console.log(`·  Public | Done | ${data.length} application (/) commands.`)
+    console.log(`· Done with ${data.length} commands.`)
   } catch (error: any) {
-    console.error(error.rawError)
+    console.log(`· Fails public commands: ${error.message}`)
   }
 }

@@ -4,6 +4,7 @@ import { Client, Collection, GatewayIntentBits } from 'discord.js'
 import config from './config'
 import type { ClientCustom } from './types/main'
 import BuildCollection from './buildCollection'
+import deployCommand from './deployCommands'
 
 export default async function startClient(): Promise<void> {
   const client: ClientCustom = new Client({
@@ -13,6 +14,8 @@ export default async function startClient(): Promise<void> {
   client.commands = await BuildCollection('commands')
   client.buttons = await BuildCollection('buttons')
   client.cooldowns = new Collection()
+
+  await deployCommand(client.commands)
 
   const eventsPath = path.join(__dirname, 'events')
   const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js') || file.endsWith('.ts'))
