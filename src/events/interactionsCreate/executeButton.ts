@@ -1,6 +1,7 @@
 import isCooldownEnable from '../../isCooldownEnable'
 import createServerDb from '../../shared/createServerDb'
 import type { CustomButtonInteraction } from '../../types/InteractionsCreate'
+import filterOwnerCommands from './filterOwnerCommands'
 
 export default async function executeCommand(interaction: CustomButtonInteraction): Promise<unknown> {
   const button = interaction.client.buttons.get(interaction.customId)
@@ -9,7 +10,11 @@ export default async function executeCommand(interaction: CustomButtonInteractio
     return
   }
 
-  interaction.deferReply({ ephemeral: button.ephemeral })
+  await interaction.deferReply({ ephemeral: button.ephemeral })
+
+  const passFilter = filterOwnerCommands(button.scope, interaction.user.id)
+  if (!passFilter) return await interaction.editReply({ content: 'only Owner has access to this.. >:(' })
+
   const serverId = interaction.guild?.id
   if (serverId) await createServerDb(serverId)
 

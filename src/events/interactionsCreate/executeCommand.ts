@@ -1,6 +1,7 @@
 import isCooldownEnable from '../../isCooldownEnable'
 import createServerDb from '../../shared/createServerDb'
 import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
+import filterOwnerCommands from './filterOwnerCommands'
 
 export default async function executeCommand(interaction: CustomCommandInteraction): Promise<unknown> {
   const command = interaction.client.commands.get(interaction.commandName)
@@ -8,7 +9,11 @@ export default async function executeCommand(interaction: CustomCommandInteracti
     console.error(`No command matching ${interaction.commandName} was found.`)
     return
   }
-  interaction.deferReply({ ephemeral: command.ephemeral })
+  await interaction.deferReply({ ephemeral: command.ephemeral })
+
+  const passFilter = filterOwnerCommands(command.scope, interaction.user.id)
+  if (!passFilter) return await interaction.editReply({ content: 'only Owner has access to this.. >:(' })
+
   const serverId = interaction.guild?.id
   if (serverId) await createServerDb(serverId)
 
