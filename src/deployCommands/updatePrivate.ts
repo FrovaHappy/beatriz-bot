@@ -1,14 +1,11 @@
 import { REST, Routes } from 'discord.js'
 import config from '../config'
-import { clearForDelete, getForDelete, getSetting } from '../setting'
-import { deleteServers } from '.'
+import { getSetting } from '../setting'
 
 const rest = new REST().setToken(config.discordToken)
 
 export default async function updatePrivate(commands: any[]): Promise<void> {
   const { privatesServers } = getSetting()
-  await deleteServers(getForDelete().private, rest)
-  clearForDelete(true, false)
   console.log(`\nDeploy Private Commands started with ${privatesServers.length} servers ...`)
   for (const guildId of privatesServers) {
     try {

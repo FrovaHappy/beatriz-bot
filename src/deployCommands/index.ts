@@ -2,7 +2,13 @@ import type { BaseFileCommand } from '../types/BaseFiles'
 import updatePublic from './updatePublic'
 import updatePrivate from './updatePrivate'
 import config from '../config'
-import { type REST, Routes, type Collection } from 'discord.js'
+import { REST, type Collection } from 'discord.js'
+import updateOwner from './updateOwners'
+import { clearForDelete, getForDelete } from '../setting'
+import { deleteServers } from './deleteServers'
+
+export const rest = new REST().setToken(config.discordToken)
+
 async function GetCommands(
   collection: Collection<string, BaseFileCommand>
 ): Promise<Record<'public' | 'private' | 'owner', string[]>> {
@@ -16,20 +22,12 @@ async function GetCommands(
   })
   return commands
 }
-export const deleteServers = async (guildsIds: string[], rest: REST): Promise<void> => {
-  for (const guildId of guildsIds) {
-    try {
-      await rest.put(Routes.applicationGuildCommands(config.discordClient, guildId), {
-        body: []
-      })
-    } catch (error) {
-      console.log(`·  - failed to delete guildId: ${guildId}`)
-    }
-  }
-}
-
 export default async function deployCommand(collection: Collection<string, BaseFileCommand>): Promise<void> {
   const commands = await GetCommands(collection)
+  const commandsReset = [...new Set([...getForDelete()])]
   await updatePublic(commands.public)
+  await deleteServers(commandsReset)
+  clearForDelete()
   await updatePrivate(commands.private)
+  await updateOwner(commands.owner)
 }

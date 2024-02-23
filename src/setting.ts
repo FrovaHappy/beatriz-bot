@@ -12,14 +12,10 @@ const settingSchema = object({
 
 type Setting = Zod.infer<typeof settingSchema>
 let setting: Setting | null = null
-const forDelete = {
-  private: [] as string[],
-  owner: [] as string[]
-}
+let forDelete: string[] = []
 
-export function clearForDelete(priv = true, owner = true): void {
-  if (priv) forDelete.private = []
-  if (owner) forDelete.owner = []
+export function clearForDelete(): void {
+  forDelete = []
 }
 
 export function getForDelete(): typeof forDelete {
@@ -36,8 +32,9 @@ export async function upsertSetting(data: Partial<Setting>): Promise<void> {
   const sDb = await db.setting.findFirst()
   const sEnv = stringToJson<Setting, Partial<Setting>>(config.setting ?? '{}')
 
-  forDelete.owner = forDelete.owner.filter(i => !(sDb ?? sEnv)?.ownersServers?.some(j => j === i))
-  forDelete.private = forDelete.private.filter(i => !(sDb ?? sEnv)?.privatesServers?.some(j => j === i))
+  const sDbUnion = [...(sDb?.ownersServers ?? []), ...(sDb?.privatesServers ?? [])]
+  const sEnvUnion = [...(sEnv?.ownersServers ?? []), ...(sEnv?.privatesServers ?? [])]
+  forDelete = [...new Set([...sDbUnion, ...sEnvUnion])]
 
   if (!sDb) {
     settingSchema.parse(sEnv)
