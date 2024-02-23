@@ -10,6 +10,6 @@ export default BuildCommand({
   async execute(interaction) {
     const confirm = interaction.client.buttons.get(ButtonsNames.ping)?.data
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirm)
-    interaction.reply({ content: 'pong!', components: [row] })
+    interaction.editReply({ content: 'pong!', components: [row] })
   }
 })
