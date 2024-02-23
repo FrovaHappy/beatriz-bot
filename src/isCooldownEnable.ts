@@ -1,7 +1,7 @@
 import { Collection } from 'discord.js'
 import type { BaseEventInteractionCreate } from './types/main'
 import type { CustomBaseInteraction } from './types/InteractionsCreate'
-import config from './config'
+import { getSetting } from './setting'
 type ReturnMessage = string | null
 export default async function isCooldownEnable(
   interaction: CustomBaseInteraction,
@@ -17,7 +17,7 @@ export default async function isCooldownEnable(
   try {
     const timestamps = cooldowns.get(cooldownName)
     if (!timestamps) throw new Error(`Cannot find ${cooldownName} in cooldowns`)
-    const defaultCooldownDuration = config.defaultCooldown
+    const defaultCooldownDuration = getSetting().cooldown
     const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000
 
     if (timestamps.has(interaction.user.id)) {
