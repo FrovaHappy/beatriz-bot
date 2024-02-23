@@ -23,14 +23,22 @@ enum PermissionBot {
   owner
 }
 
+model Setting {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  privatesServers  String[]
+  ownersServers    String[]
+  discordInviteUrl String
+  cooldown         Int
+}
+
 model Server {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  serverId      String          @unique
-  permissionBot PermissionBot
-  colorCommand  ColorCommand?
-  users         User[]          @relation(fields: [usersId], references: [id])
-  usersId       String[]        @db.ObjectId
-  welcome       WelcomeCommand?
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  serverId       String          @unique
+  permissionsBot PermissionBot[]
+  colorCommand   ColorCommand?
+  users          User[]          @relation(fields: [usersId], references: [id])
+  usersId        String[]        @db.ObjectId
+  welcome        WelcomeCommand?
 }
 
 model ColorCommand {
@@ -58,11 +66,11 @@ enum SendWelcome {
 }
 
 model WelcomeCommand {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  server   Server @relation(fields: [serverId], references: [serverId])
-  serverId String @unique
-  message String
-  image Json?
-  send SendWelcome
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  server    Server      @relation(fields: [serverId], references: [serverId])
+  serverId  String      @unique
+  message   String
+  image     Json?
+  send      SendWelcome
   channelId String
 }
