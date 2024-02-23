@@ -2,6 +2,7 @@ import type z from 'zod'
 import { type ZodObject, any, array, number, object, record, string } from 'zod'
 import validate from '../../shared/validate'
 const LIMIT_NUMBER = 1024
+const URL_IMAGE = /^https:\/\/(i.igur.com|media.discordapp.net)\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/
 const COLOR = string()
   .regex(/^(#[a-fA-F0-9]{6}|transparent)$/, 'required hex valid with six numbers')
   .optional()
@@ -39,7 +40,7 @@ const nameSchema = textSchema.omit({ content: true }).extend({
 const imageSchema = baseSchema
   .omit({ color: true })
   .extend({
-    img: string().url()
+    img: string().url().regex(URL_IMAGE)
   })
   .strict()
 
