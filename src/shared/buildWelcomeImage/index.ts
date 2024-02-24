@@ -1,9 +1,15 @@
-import { createCanvas } from '@napi-rs/canvas'
+import { GlobalFonts, createCanvas } from '@napi-rs/canvas'
 import { type Canvas } from '../../commands/setWelcome/validate'
 import iconPencil from './iconPencil'
 import { AttachmentBuilder, type GuildMember } from 'discord.js'
 import textPencil from './textPincel'
 import imagePencil from './imagePencil'
+
+// load Fonts
+import fonts from '../fonts'
+for (const font of fonts) {
+  GlobalFonts.registerFromPath(font.patch, font.nameAlias)
+}
 
 export default async function buildWelcomeImage(data: Canvas, member: GuildMember): Promise<AttachmentBuilder> {
   const canvas = createCanvas(data.width, data.height)

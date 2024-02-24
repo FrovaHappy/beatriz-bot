@@ -6,12 +6,13 @@ interface Font {
 }
 function getFonts(): Font[] {
   const fonts: Font[] = []
-  const fontsFiles = readdirSync(__dirname).filter(
+  const folderPath = path.join(__dirname, '../../fonts')
+  const fontsFiles = readdirSync(folderPath).filter(
     file => file.endsWith('.ttf') || file.endsWith('.woff') || file.endsWith('.woff2')
   )
   for (const fontFile of fontsFiles) {
     const nameAlias = fontFile.split('.')[0].replace('-', ' ')
-    fonts.push({ nameAlias, patch: path.join(__dirname, fontFile) })
+    fonts.push({ nameAlias, patch: path.join(folderPath, fontFile) })
   }
   return fonts
 }
