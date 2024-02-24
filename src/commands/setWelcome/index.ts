@@ -43,7 +43,7 @@ export default BuildCommand({
     const serverId = i.guild?.id
     if (!serverId) return await i.editReply({ content: 'error with server id' })
     const image = stringToJson(i.options.getString('image') ?? '')
-    const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../mocks/welcome.json'), 'utf-8'))
+    const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../../mocks/welcome.json'), 'utf-8'))
     const message = i.options.getString('message') ?? 'welcome <user_name> with you we are <user_count>.'
     const channelId = i.options.getChannel('channel', true).id
     const send = i.options.getString('send', true) as SendWelcome
