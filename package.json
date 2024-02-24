@@ -2,6 +2,9 @@
   "name": "beatriz-bot",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "20"
+  },
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
     "dev:deploy": "ts-node src/deployCommands.ts",
