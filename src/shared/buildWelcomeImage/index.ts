@@ -23,8 +23,8 @@ export default async function buildWelcomeImage(data: Canvas, member: GuildMembe
       ctx.drawImage(cLayer, layer.x, layer.y)
     }
   }
-
-  const extension = 'webp'
+  ctx.scale(1.5, 1.5)
+  const extension = 'png'
 
   return new AttachmentBuilder(await canvas.encode(extension), { name: `welcome.${extension}` })
 }
