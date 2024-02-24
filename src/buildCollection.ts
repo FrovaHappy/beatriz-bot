@@ -5,7 +5,15 @@ import config from './config'
 export default async function BuildCollection<G, T>(pointFolder: string): Promise<Collection<G, T>> {
   const collection = new Collection<G, T>()
   const foldersPath = path.join(__dirname, pointFolder)
-  const folders = readdirSync(foldersPath)
+  const folders = ((): string[] | null => {
+    try {
+      return readdirSync(foldersPath)
+    } catch (error) {
+      return null
+    }
+  })()
+  if (!folders) return collection
+
   const folderError = []
   const commandsError = []
   for (const folder of folders) {
