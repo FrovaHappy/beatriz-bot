@@ -1,51 +1,75 @@
 {
   "background": null,
-  "height": 300,
+  "height": 250,
   "width": 500,
   "colorDominate": null,
   "layers": [
     {
       "type": "image",
-      "x": 100,
-      "y": 100,
-      "height": 100,
-      "width": 100,
-      "img": "https://cdn.discordapp.com/avatars/1208594297948078123/727f25d13d3dfe4a62d1f52959812800.png"
-    },
-    {
-      "x": 80,
-      "y": 100,
-      "type": "name",
-      "color": "#AF7AC5",
-      "size": 24,
-      "family": "Roboto",
-      "weight": 900,
-      "align": "start",
-      "limitLetters": 0,
-      "baseline": "alphabetic",
-      "nameType": "username"
-    },
-    {
-      "x": 80,
-      "y": 200,
-      "type": "text",
-      "size": 24,
-      "color": "#FF5733",
-      "family": "Inter",
-      "weight": 100,
-      "align": "start",
-      "limitLetters": 50,
-      "baseline": "alphabetic",
-      "content": "Welcome to Prueba"
+      "x": 0,
+      "y": 0,
+      "height": 250,
+      "width": 500,
+      "img": "https://imgur.com/6p5IsJY.png"
     },
     {
       "type": "icon",
       "height": 100,
       "width": 100,
       "color": null,
-      "x": 20,
-      "y": 20,
-      "shape": "square20"
+      "x": 365,
+      "y": 60,
+      "shape": "circle"
+    },
+    {
+      "type": "image",
+      "x": 100,
+      "y": 33,
+      "height": 217,
+      "width": 400,
+      "img": "https://imgur.com/5ZHN41E.png"
+    },
+    {
+      "type": "image",
+      "x": 360,
+      "y": 55,
+      "height": 112,
+      "width": 112,
+      "img": "https://imgur.com/uswdO0J.png"
+    },
+    {
+      "type": "image",
+      "x": 10,
+      "y": 10,
+      "height": 155,
+      "width": 200,
+      "img": "https://imgur.com/uo2L5PS.png"
+    },
+    {
+      "x": 350,
+      "y": 80,
+      "type": "name",
+      "color": "#E54554",
+      "size": 36,
+      "family": "Inter",
+      "weight": 900,
+      "align": "right",
+      "limitLetters": 300,
+      "baseline": "top",
+      "nameType": "username"
+    },
+    {
+      "x": 260,
+      "y": 60,
+      "type": "text",
+      "size": 20,
+      "color": "#651D24",
+      "family": "Inter",
+      "weight": 600,
+      "align": "start",
+      "limitLetters": 0,
+      "baseline": "top",
+      "content": "Bienvenido"
     }
   ]
 }
