@@ -1,3 +1,5 @@
+import { type GuildMember } from 'discord.js'
+
 const userRules = {
   userName: '<user_name>',
   userGlobal: '<user_global>',
@@ -12,6 +14,17 @@ const rulesRequired = {
   '\\t': '\t',
   '\\r': '\r'
 }
+
+export function userSecuencies(str: string, m: GuildMember): string {
+  str = messageFormatting(str, {
+    userCount: m.guild.members.cache.size.toString(),
+    userGlobal: m.user.globalName ?? m.user.username,
+    userId: m.user.id,
+    userName: m.user.username
+  })
+  return str
+}
+
 export default function messageFormatting(
   str: string,
   formats: Partial<typeof userRules & typeof rulesInternal>
