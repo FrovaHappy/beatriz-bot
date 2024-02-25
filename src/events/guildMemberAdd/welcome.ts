@@ -23,7 +23,7 @@ export default async function welcome(member: GuildMember): Promise<void> {
   })
   if (!welcomeDb) return
   const { channelId, image, message, send } = welcomeDb
-  const imageMock: Canvas = JSON.parse(readFileSync(path.join(__dirname, '../../../../mocks/welcome.json'), 'utf-8'))
+  const imageMock: Canvas = JSON.parse(readFileSync(path.join(__dirname, '../../../mocks/welcome.json'), 'utf-8'))
   const webhook = await buildWebhook(member, { channelId })
   await webhook?.send(await SendWelcomeWith({ send, image: image ?? imageMock, message, member }))
   await webhook.delete()
