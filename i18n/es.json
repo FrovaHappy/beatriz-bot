@@ -1,0 +1,9 @@
+{
+  "general": {
+    "withoutPermission": "tu no tienes permisos para user este comando.\nRequieres: <permissions>."
+  },
+  "setWelcome": {
+    "title": "Configurado con la siguiente configuración",
+    "description": "* channel: <slot_1>\n* send: <slot_2>"
+  }
+}

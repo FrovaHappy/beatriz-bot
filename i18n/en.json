@@ -1,0 +1,9 @@
+{
+  "general": {
+    "withoutPermission": "you are not allowed the permission to access this.\nRequired: <permissions>."
+  },
+  "setWelcome": {
+    "title": "Set with the next properties",
+    "description": "* channel: <slot_1>\n* send: <slot_2>"
+  }
+}

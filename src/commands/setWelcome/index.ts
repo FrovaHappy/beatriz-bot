@@ -1,4 +1,4 @@
-import { type GuildMember, SlashCommandBuilder } from 'discord.js'
+import { type GuildMember, SlashCommandBuilder, EmbedBuilder, Colors } from 'discord.js'
 import { CommandsNames } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
 import { readFileSync } from 'node:fs'
@@ -6,17 +6,18 @@ import path from 'node:path'
 import { validateCanvas } from './validate'
 import { formatZodError } from '../../shared/validate'
 import { SendWelcome } from '@prisma/client'
-import messageFormatting from '../shared/messageFormatting'
+import messageFormatting from '../../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
 import SendWelcomeWith from '../../shared/sendWelcomeWith'
+import i18n from '../../shared/i18n'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
   cooldown: 0,
   name,
   ephemeral: true,
-  scope: 'private',
+  scope: 'owner',
   data: new SlashCommandBuilder()
     .setName(name)
     .setDescription('Setting the welcome of this server.')
@@ -40,6 +41,8 @@ export default BuildCommand({
       op.setName('image').setDescription('Customize the welcome image, se espera un formato JSON.').setRequired(false)
     ),
   async execute(i) {
+    const lang = i18n(i.locale)
+    console.log(i.locale)
     const serverId = i.guild?.id
     if (!serverId) return await i.editReply({ content: 'error with server id' })
     const image = stringToJson(i.options.getString('image') ?? '')
@@ -65,8 +68,20 @@ export default BuildCommand({
       }
     })
 
-    await i.editReply(
-      await SendWelcomeWith({ image: image ?? imageMock, message: messageReply, member: i.member as GuildMember, send })
-    )
+    await i.editReply({
+      embeds: [
+        new EmbedBuilder({
+          title: lang.setWelcome.title,
+          color: Colors.Aqua,
+          description: lang.setWelcome.description
+        })
+      ],
+      ...(await SendWelcomeWith({
+        image: image ?? imageMock,
+        message: messageReply,
+        member: i.member as GuildMember,
+        send
+      }))
+    })
   }
 })
