@@ -6,7 +6,7 @@ import path from 'node:path'
 import { validateCanvas } from './validate'
 import { formatZodError } from '../../shared/validate'
 import { SendWelcome } from '@prisma/client'
-import messageFormatting from '../../shared/messageFormatting'
+import { userSecuencies } from '../../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
 import SendWelcomeWith from '../../shared/sendWelcomeWith'
@@ -53,12 +53,7 @@ export default BuildCommand({
 
     const invalidJson = image ? validateCanvas(image) : undefined
     if (invalidJson) return await i.editReply({ content: formatZodError(invalidJson) })
-    const messageReply = messageFormatting(message, {
-      userName: i.user.username,
-      userGlobal: i.user.globalName ?? '<error UserGlobal>',
-      userId: i.user.id,
-      userCount: i.guild?.memberCount.toString() ?? '<Error Count>'
-    })
+    const messageReply = userSecuencies(message, i.member as GuildMember)
     await db.server.update({
       where: { serverId },
       data: {

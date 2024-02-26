@@ -17,7 +17,7 @@ const rulesRequired = {
 
 export function userSecuencies(str: string, m: GuildMember): string {
   str = messageFormatting(str, {
-    userCount: m.guild.members.cache.size.toString(),
+    userCount: m.guild.memberCount.toString(),
     userGlobal: m.user.globalName ?? m.user.username,
     userId: m.user.id,
     userName: m.user.username
