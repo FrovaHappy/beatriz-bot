@@ -17,7 +17,7 @@
     },
     "response": {
       "title": "Set with the next properties",
-      "description": "*channel: <slot_0>\n* send: <slot_1>"
+      "description": "* channel: <slot_0>\n* send: <slot_1>"
     }
   }
 }

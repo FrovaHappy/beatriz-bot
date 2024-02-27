@@ -17,7 +17,7 @@
     },
     "response": {
       "title": "Configurado con la siguiente configuración.",
-      "description": "*channel: <slot_0>\n* send: <slot_1>"
+      "description": "* channel: <slot_0>\n* send: <slot_1>"
     }
   }
 }
