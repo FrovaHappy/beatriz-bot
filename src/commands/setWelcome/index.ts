@@ -58,9 +58,9 @@ export default BuildCommand({
     ),
   async execute(i) {
     const i18n = getI18n(i.locale)
-    console.log(i.locale)
     const serverId = i.guild?.id
     if (!serverId) return await i.editReply({ content: 'error with server id' })
+    const imageLength = i.options.getString('image')?.length ?? 0
     const image = stringToJson(i.options.getString('image') ?? '')
     const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../../mocks/welcome.json'), 'utf-8'))
     const message = i.options.getString('message') ?? i18n.setWelcome.messageDefault
@@ -68,7 +68,7 @@ export default BuildCommand({
     const send = i.options.getString('send', true) as SendWelcome
 
     const invalidJson = image ? validateCanvas(image) : undefined
-    if (invalidJson) {
+    if (invalidJson ?? imageLength > 0) {
       return await i.editReply({
         embeds: [
           new EmbedBuilder({
