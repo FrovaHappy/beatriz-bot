@@ -10,7 +10,7 @@ import { userSecuencies } from '../../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
 import SendWelcomeWith from '../../shared/sendWelcomeWith'
-import i18n from '../../shared/i18n'
+import getI18n, { es, en } from '../../shared/i18n'
 
 const name = CommandsNames.setWelcome
 export default BuildCommand({
@@ -20,39 +20,64 @@ export default BuildCommand({
   scope: 'owner',
   data: new SlashCommandBuilder()
     .setName(name)
-    .setDescription('Setting the welcome of this server.')
+    .setDescription(en.setWelcome.build.mainDescription)
+    .setDescriptionLocalization('es-ES', es.setWelcome.build.mainDescription)
     .addChannelOption(op =>
-      op.setName('channel').setDescription('Channel where welcomes will be sent.').setRequired(true)
+      op
+        .setName('channel')
+        .setDescription(en.setWelcome.build.channelDescription)
+        .setDescriptionLocalization('es-ES', es.setWelcome.build.channelDescription)
+        .setRequired(true)
     )
     .addStringOption(op =>
       op
         .setName('send')
-        .setDescription('Choose how the welcome will be sent.')
+        .setDescription(en.setWelcome.build.sendDescription)
+        .setDescriptionLocalization('es-ES', es.setWelcome.build.sendDescription)
         .addChoices(
+          { name: 'All', value: SendWelcome.all },
           { name: 'alone message', value: SendWelcome.alone_message },
           { name: 'Alone Image', value: SendWelcome.alone_image },
-          { name: 'none', value: SendWelcome.none },
-          { name: 'All', value: SendWelcome.all }
+          { name: 'none', value: SendWelcome.none }
         )
         .setRequired(true)
     )
-    .addStringOption(op => op.setName('message').setDescription('Customize the welcome message').setRequired(false))
     .addStringOption(op =>
-      op.setName('image').setDescription('Customize the welcome image, se espera un formato JSON.').setRequired(false)
+      op
+        .setName('message')
+        .setDescription(en.setWelcome.build.messageDescription)
+        .setDescriptionLocalization('es-ES', es.setWelcome.build.messageDescription)
+        .setRequired(false)
+    )
+    .addStringOption(op =>
+      op
+        .setName('image')
+        .setDescription(en.setWelcome.build.imageDescription)
+        .setDescriptionLocalization('es-ES', es.setWelcome.build.imageDescription)
+        .setRequired(false)
     ),
   async execute(i) {
-    const lang = i18n(i.locale)
+    const i18n = getI18n(i.locale)
     console.log(i.locale)
     const serverId = i.guild?.id
     if (!serverId) return await i.editReply({ content: 'error with server id' })
     const image = stringToJson(i.options.getString('image') ?? '')
     const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../../mocks/welcome.json'), 'utf-8'))
-    const message = i.options.getString('message') ?? 'welcome <user_name> with you we are <user_count>.'
+    const message = i.options.getString('message') ?? i18n.setWelcome.messageDefault
     const channelId = i.options.getChannel('channel', true).id
     const send = i.options.getString('send', true) as SendWelcome
 
     const invalidJson = image ? validateCanvas(image) : undefined
-    if (invalidJson) return await i.editReply({ content: formatZodError(invalidJson) })
+    if (invalidJson) {
+      return await i.editReply({
+        embeds: [
+          new EmbedBuilder({
+            title: i18n.setWelcome.errorValidation.title,
+            description: `${i18n.setWelcome.errorValidation.description}\n${formatZodError(invalidJson)}`
+          })
+        ]
+      })
+    }
     const messageReply = userSecuencies(message, i.member as GuildMember)
     await db.server.update({
       where: { serverId },
@@ -66,9 +91,9 @@ export default BuildCommand({
     await i.editReply({
       embeds: [
         new EmbedBuilder({
-          title: lang.setWelcome.title,
+          title: i18n.setWelcome.response.title,
           color: Colors.Aqua,
-          description: lang.setWelcome.description
+          description: i18n.setWelcome.response.description
         })
       ],
       ...(await SendWelcomeWith({

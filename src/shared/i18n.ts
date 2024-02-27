@@ -1,16 +1,14 @@
-import path from 'node:path'
-import { readFileSync } from 'node:fs'
-import { type Root } from '../types/Lang'
-const pathFolder = path.join(__dirname, '../../i18n')
-const EN = JSON.parse(readFileSync(path.join(pathFolder, 'en.json'), 'utf-8'))
-const ES = JSON.parse(readFileSync(path.join(pathFolder, 'es.json'), 'utf-8'))
-const languages = {
-  en: EN,
-  es: { ...EN, ...ES }
-}
+import ES from '../../i18n/es.json'
+import EN from '../../i18n/en.json'
 
-export default function i18n(lang: string): Root {
+const languages: Record<string, typeof EN> = {
+  en: EN,
+  es: ES
+}
+export const es = languages.es
+export const en = languages.en
+
+export default function getI18n(lang: string): typeof EN {
   lang = lang.slice(0, 2)
-  console.log(lang)
-  return languages[lang as keyof typeof languages] ?? EN
+  return languages[lang] ?? languages.en
 }
