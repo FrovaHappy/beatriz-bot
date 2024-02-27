@@ -1,5 +1,5 @@
-import ES from '../../i18n/es.json'
-import EN from '../../i18n/en.json'
+import ES from '../i18n/es.json'
+import EN from '../i18n/en.json'
 
 const languages: Record<string, typeof EN> = {
   en: EN,
