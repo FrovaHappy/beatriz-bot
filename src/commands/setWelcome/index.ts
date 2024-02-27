@@ -6,7 +6,7 @@ import path from 'node:path'
 import { validateCanvas } from './validate'
 import { formatZodError } from '../../shared/validate'
 import { SendWelcome } from '@prisma/client'
-import { userSecuencies } from '../../shared/messageFormatting'
+import messageFormatting, { userSecuencies } from '../../shared/messageFormatting'
 import db from '../../db'
 import { stringToJson } from '../../shared/general'
 import SendWelcomeWith from '../../shared/sendWelcomeWith'
@@ -87,13 +87,15 @@ export default BuildCommand({
         }
       }
     })
-
     await i.editReply({
       embeds: [
         new EmbedBuilder({
           title: i18n.setWelcome.response.title,
           color: Colors.Aqua,
-          description: i18n.setWelcome.response.description
+          description: messageFormatting(i18n.setWelcome.response.description, {
+            slot0: channelId,
+            slot1: send
+          })
         })
       ],
       ...(await SendWelcomeWith({
