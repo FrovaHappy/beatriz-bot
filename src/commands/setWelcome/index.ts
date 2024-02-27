@@ -1,4 +1,4 @@
-import { type GuildMember, SlashCommandBuilder, EmbedBuilder, Colors } from 'discord.js'
+import { type GuildMember, SlashCommandBuilder, EmbedBuilder, Colors, PermissionFlagsBits } from 'discord.js'
 import { CommandsNames } from '../../enums'
 import { BuildCommand } from '../../buildersSchema'
 import { readFileSync } from 'node:fs'
@@ -55,6 +55,9 @@ export default BuildCommand({
         .setDescription(en.setWelcome.build.imageDescription)
         .setDescriptionLocalization('es-ES', es.setWelcome.build.imageDescription)
         .setRequired(false)
+    )
+    .setDefaultMemberPermissions(
+      PermissionFlagsBits.Administrator | PermissionFlagsBits.ManageChannels | PermissionFlagsBits.ManageMessages
     ),
   async execute(i) {
     const i18n = getI18n(i.locale)
