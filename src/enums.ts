@@ -1,6 +1,7 @@
 export const enum CommandsNames {
   test = 'test',
   setWelcome = 'set-welcome',
+  aboutMe = 'about-me',
   ping = 'ping',
   colors = 'colors',
   setColors = 'set-colors',
