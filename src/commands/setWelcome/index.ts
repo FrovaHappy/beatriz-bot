@@ -17,7 +17,7 @@ export default BuildCommand({
   cooldown: 0,
   name,
   ephemeral: true,
-  scope: 'owner',
+  scope: 'public',
   data: new SlashCommandBuilder()
     .setName(name)
     .setDescription(en.setWelcome.build.mainDescription)
