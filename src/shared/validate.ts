@@ -16,7 +16,8 @@ export default function validate(obj: any, zodObj: ZodObject<any>): DataError | 
   }
 }
 
-export function formatZodError(data: DataError): string {
+export function formatZodError(data: DataError | undefined): string {
+  if (!data) return '* data Json not is valid JSON'
   let str = ''
   const { type, issues } = data
   for (const e of issues) {
