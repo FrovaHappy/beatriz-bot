@@ -19,14 +19,12 @@ export default BuildCommand({
   async execute(i) {
     const rolePermission = i.options.getRole('role', false)?.id ?? null
 
-    if (!(i.commandName === name)) return await i.editReply('error: command loaded incorrectly')
-
     if (!i.appPermissions?.has([PermissionFlagsBits.ManageRoles])) {
-      return await i.editReply(messages.requiredPermissions)
+      return messages.requiredPermissions
     }
     const serverId = i.guildId
     if (!serverId) {
-      return await i.editReply('server not found')
+      return { content: 'server not found' }
     }
     const { pointerId } =
       (await db.colorCommand.findUnique({
@@ -35,12 +33,12 @@ export default BuildCommand({
 
     const role = i.guild?.roles.cache.find(r => r.id === pointerId ?? config.roleUndefined) ?? (await createRole(i))
 
-    if (!role) return await i.editReply('no se pudo crear/encontrar el role')
+    if (!role) return { content: 'no se pudo crear/encontrar el role' }
     await db.colorCommand.upsert({
       where: { serverId },
       create: { pointerId: role.id, serverId, rolePermission },
       update: { pointerId, rolePermission }
     })
-    await i.editReply('role pointer creado')
+    return { content: 'role creado' }
   }
 })

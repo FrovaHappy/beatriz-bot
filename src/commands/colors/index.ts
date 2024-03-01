@@ -38,7 +38,7 @@ export default BuildCommand({
       where: { serverId: interaction.guildId ?? '' },
       include: { colors: true }
     })
-    if (!colorCommand) return await interaction.editReply('requiere configuración')
+    if (!colorCommand) return { content: 'Requiere configuración' }
 
     const hexColor = interaction.options.getString('hex-color', true) as `#${string}`
     const hexCustom = interaction.options.getString('hex-custom', false)?.trim().toLowerCase() as `#${string}`
@@ -46,27 +46,27 @@ export default BuildCommand({
     await removeRoleOfUser({ interaction, colors: colorCommand.colors })
 
     if (!hexCustom) {
-      if (hexColor === '#none') return await interaction.editReply('role quitado')
+      if (hexColor === '#none') return { content: 'role quitado' }
       const { hasSusses } = await changeToColor({ color: hexColor, interaction, colors, pointerId })
-      if (!hasSusses) return await interaction.editReply('service error')
-      return await interaction.editReply(`color cambiado ${hexColor}`)
+      if (!hasSusses) return { content: 'servicie Error' }
+      return { content: `color cambiado ${hexColor}` }
     }
     if (!regexColors.test(hexCustom)) {
-      return await interaction.editReply(`color invalido ${hexColor}`)
+      return { content: `color invalido ${hexColor}` }
     }
     if (rolePermission) {
       const isRolePermission = (interaction.member?.roles as GuildMemberRoleManager).cache.has(
         rolePermission ?? config.roleUndefined
       )
       if (!isRolePermission) {
-        return await interaction.editReply('requiere /set-color')
+        return { content: 'requiere /set-color' }
       }
     }
     if (hexCustom === '#000000') {
-      return await interaction.editReply(`color invalido ${hexColor}`)
+      return { content: `color invalido ${hexColor}` }
     }
     const { hasSusses } = await changeToColor({ color: hexCustom, interaction, colors, pointerId })
-    if (!hasSusses) return await interaction.editReply('service error')
-    return await interaction.editReply(`color cambiado ${hexColor}`)
+    if (!hasSusses) return { content: 'servicie Error' }
+    return { content: `color cambiado ${hexColor}` }
   }
 })

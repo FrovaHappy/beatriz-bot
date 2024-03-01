@@ -16,7 +16,7 @@ export default BuildCommand({
   execute: async i => {
     const setting = getSetting()
     const i18n = getI18n(i.locale)
-    await i.editReply({
+    return {
       embeds: [
         new EmbedBuilder({
           title: i18n.aboutMe.title,
@@ -30,6 +30,6 @@ export default BuildCommand({
           })
         })
       ]
-    })
+    }
   }
 })

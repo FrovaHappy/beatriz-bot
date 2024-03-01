@@ -24,9 +24,9 @@ export default BuildCommand({
       where: { serverId: i.guildId ?? '' },
       include: { colors: true }
     })
-    if (!colorCommand) return await i.editReply(messages.requireSettings({ interaction: i }))
+    if (!colorCommand) return messages.requireSettings({ interaction: i })
     const { validColorMain } = validatesRoles(i, colorCommand)
-    if (!validColorMain) return await i.editReply(messages.requireSettings({ interaction: i }))
+    if (!validColorMain) return messages.requireSettings({ interaction: i })
 
     const { colors, pointerId } = colorCommand
     const colorMain = i.guild?.roles.cache.find(r => r.id === pointerId) as Role
@@ -39,6 +39,6 @@ export default BuildCommand({
     }
     await i.guild?.roles.setPositions(positions)
 
-    return await i.editReply({ content: `Roles ordenados en la position ${colorMain.rawPosition}` })
+    return { content: `Roles ordenados en la position ${colorMain.rawPosition}` }
   }
 })

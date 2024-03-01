@@ -62,7 +62,7 @@ export default BuildCommand({
   async execute(i) {
     const i18n = getI18n(i.locale)
     const serverId = i.guild?.id
-    if (!serverId) return await i.editReply({ content: 'error with server id' })
+    if (!serverId) return { content: 'error with server id' }
     const imageLength = i.options.getString('image')?.length ?? 0
     const image = stringToJson(i.options.getString('image') ?? '')
     const imageMock = stringToJson(readFileSync(path.join(__dirname, '../../../mocks/welcome.json'), 'utf-8'))
@@ -72,14 +72,14 @@ export default BuildCommand({
 
     const invalidJson = image ? validateCanvas(image) : undefined
     if (invalidJson ?? imageLength > 0) {
-      return await i.editReply({
+      return {
         embeds: [
           new EmbedBuilder({
             title: i18n.setWelcome.errorValidation.title,
             description: `${i18n.setWelcome.errorValidation.description}\n${formatZodError(invalidJson)}`
           })
         ]
-      })
+      }
     }
     const messageReply = userSecuencies(message, i.member as GuildMember)
     await db.server.update({
@@ -90,7 +90,7 @@ export default BuildCommand({
         }
       }
     })
-    await i.editReply({
+    return {
       embeds: [
         new EmbedBuilder({
           title: i18n.setWelcome.response.title,
@@ -107,6 +107,6 @@ export default BuildCommand({
         member: i.member as GuildMember,
         send
       }))
-    })
+    }
   }
 })

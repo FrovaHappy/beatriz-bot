@@ -21,7 +21,7 @@ export default async function executeCommand(interaction: CustomCommandInteracti
   if (messageCooldown) return await interaction.editReply({ content: messageCooldown })
 
   try {
-    await command.execute(interaction)
+    await interaction.editReply(await command.execute(interaction))
   } catch (error) {
     console.error(`Error executing ${interaction.commandName}`)
     console.error(error)

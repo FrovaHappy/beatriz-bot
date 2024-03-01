@@ -15,9 +15,9 @@ export default BuildCommand({
       include: { colors: true }
     })
 
-    if (!colorCommand) return await interaction.editReply(messages.requireSettings({ interaction }))
+    if (!colorCommand) return messages.requireSettings({ interaction })
     const { validColorMain } = validatesRoles(interaction, colorCommand)
-    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
+    if (!validColorMain) return messages.requireSettings({ interaction })
 
     const colors = colorCommand.colors ?? []
     let colorsUsage = 0
@@ -26,7 +26,7 @@ export default BuildCommand({
       if (!roleGuild) return
       if (roleGuild.members.size > 0) colorsUsage += 1
     })
-    return await interaction.editReply({
+    return {
       embeds: [
         new EmbedBuilder()
           .setTitle('Lista de colores')
@@ -38,6 +38,6 @@ export default BuildCommand({
             ${colors.map(col => `<@&${col.colorId}>`).join('  <:minimize:1163923149717512323>  ')}
           `)
       ]
-    })
+    }
   }
 })

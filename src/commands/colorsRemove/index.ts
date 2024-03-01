@@ -33,20 +33,21 @@ export default BuildCommand({
       include: { colors: true }
     })
 
-    if (!colorCommand) return await interaction.editReply(messages.requireSettings({ interaction }))
+    if (!colorCommand) return messages.requireSettings({ interaction })
 
     const { validColorMain } = validatesRoles(interaction, colorCommand)
-    if (!validColorMain) return await interaction.editReply(messages.requireSettings({ interaction }))
+    if (!validColorMain) return messages.requireSettings({ interaction })
     const { colors } = colorCommand
     const action = interaction.options.getString('actions')
     if (action === Actions.noUsages) {
       const result = await actionNoUsages(interaction, colors)
-      return await interaction.editReply({
+      return {
         content: `
         Roles no usados eliminados: ${result.deleteForNoUsages}
         Roles eliminados manualmente: ${result.delForUndefined}
         `
-      })
+      }
     }
+    return { content: 'operation without implementation' }
   }
 })
