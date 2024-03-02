@@ -12,7 +12,7 @@ export interface BaseEventInteractionCreate {
   name: CommandsNames | ButtonsNames
   type: 'command' | 'button'
   scope: 'public' | 'private' | 'owner'
-  cooldown: number
+  cooldown?: number
   ephemeral: boolean
   permissions: BitFieldResolvable
 }
