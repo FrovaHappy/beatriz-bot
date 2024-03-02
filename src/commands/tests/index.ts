@@ -8,6 +8,6 @@ export default BuildCommand({
   scope: 'owner',
   data: new SlashCommandBuilder().setName(name).setDescription('Replies with Pong!'),
   async execute(interaction) {
-    interaction.editReply({ content: 'test!' })
+    return { content: 'test!' }
   }
 })
