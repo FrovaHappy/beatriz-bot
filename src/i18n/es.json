@@ -1,6 +1,9 @@
 {
   "general": {
-    "withoutPermission": "Tu no tienes permisos para user este comando.\nRequieres: <permissions>."
+    "errorPermissions": {
+      "title": "/<slot_0> requiere permisos.",
+      "description": "El comando requiere los siguientes permisos para funcionar correctamente:\n<slot_0>\n\nSi su propósito es deshabilitarlo completamente, le recomiendo que vaya a ``configuración > integraciones > <slot_1>`` y deshabilite el comando."
+    }
   },
   "setWelcome": {
     "messageDefault": "Bienvenido <user_name> contigo somos <user_count>.",

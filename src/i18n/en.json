@@ -1,6 +1,9 @@
 {
   "general": {
-    "withoutPermission": "You are not allowed the permission to access this.\nRequired: <permissions>."
+    "errorPermissions": {
+      "title": "/<slot_0> command requires permissions.",
+      "description": "The command requires the next permissions for functioning correctly:\n<slot_0>\n\nIf your purpose is to disable completely, I recommend you to go to ``settings > integrations > <slot_1>`` and disable the command."
+    }
   },
   "setWelcome": {
     "messageDefault": "Welcome <user_name> with you we are <user_count>.",
