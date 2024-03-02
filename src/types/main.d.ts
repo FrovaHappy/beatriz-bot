@@ -1,4 +1,4 @@
-import type { Client, Collection } from 'discord.js'
+import type { Client, Collection, BitFieldResolvable } from 'discord.js'
 import type { BaseFileButton, BaseFileCommand } from './BaseFiles'
 import type { ButtonsNames, CommandsNames } from '../enums'
 
@@ -12,6 +12,7 @@ export interface BaseEventInteractionCreate {
   name: CommandsNames | ButtonsNames
   type: 'command' | 'button'
   scope: 'public' | 'private' | 'owner'
-  cooldown?: number
-  ephemeral?: boolean
+  cooldown: number
+  ephemeral: boolean
+  permissions: BitFieldResolvable
 }

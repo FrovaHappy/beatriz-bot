@@ -2,6 +2,7 @@ import isCooldownEnable from '../../isCooldownEnable'
 import createServerDb from '../../shared/createServerDb'
 import type { CustomCommandInteraction } from '../../types/InteractionsCreate'
 import filterOwnerCommands from './filterOwnerCommands'
+import hasPermissionsBot from './hasPermissionsBot'
 
 export default async function executeCommand(interaction: CustomCommandInteraction): Promise<unknown> {
   const command = interaction.client.commands.get(interaction.commandName)
@@ -9,6 +10,8 @@ export default async function executeCommand(interaction: CustomCommandInteracti
     console.error(`No command matching ${interaction.commandName} was found.`)
     return
   }
+  if (!(await hasPermissionsBot(interaction, command))) return
+
   await interaction.deferReply({ ephemeral: command.ephemeral })
 
   const passFilter = filterOwnerCommands(command.scope, interaction.user.id)
