@@ -1,10 +1,12 @@
 import { PermissionsBitField } from 'discord.js'
 import type { BaseFileButton, BaseFileCommand } from './types/BaseFiles'
-interface BuildCommandFile extends Omit<BaseFileCommand, 'type' | 'permissions'> {
+interface BuildCommandFile extends Omit<BaseFileCommand, 'type' | 'permissions' | 'ephemeral'> {
   permissions?: bigint
+  ephemeral?: boolean
 }
-interface BuildButtonFile extends Omit<BaseFileButton, 'type' | 'scope' | 'permissions'> {
+interface BuildButtonFile extends Omit<BaseFileButton, 'type' | 'scope' | 'permissions' | 'ephemeral'> {
   permissions?: bigint
+  ephemeral?: boolean
 }
 const basePermissions =
   PermissionsBitField.Flags.SendMessages |
