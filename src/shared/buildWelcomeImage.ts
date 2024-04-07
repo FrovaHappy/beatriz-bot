@@ -3,8 +3,8 @@ import { type Canvas } from '../commands/setWelcome/validate'
 import { AttachmentBuilder, type GuildMember } from 'discord.js'
 
 // load Fonts
-import fonts from '@/shared/fonts'
-import renderCanvas from '@/shared/renderCanvas'
+import fonts from './fonts'
+import renderCanvas from './renderCanvas'
 import type { Base, Layer, TextBase } from '@/types/Canvas.types'
 for (const font of fonts) {
   GlobalFonts.registerFromPath(font.patch, font.nameAlias)
