@@ -5,6 +5,7 @@
   "colorDominate": null,
   "layers": [
     {
+      "id": 0,
       "type": "image",
       "x": 0,
       "y": 0,
@@ -13,6 +14,7 @@
       "img": "https://imgur.com/6p5IsJY.png"
     },
     {
+      "id": 1,
       "type": "icon",
       "height": 100,
       "width": 100,
@@ -22,6 +24,7 @@
       "shape": "circle"
     },
     {
+      "id": 2,
       "type": "image",
       "x": 100,
       "y": 33,
@@ -30,6 +33,7 @@
       "img": "https://imgur.com/5ZHN41E.png"
     },
     {
+      "id": 3,
       "type": "image",
       "x": 360,
       "y": 55,
@@ -38,6 +42,7 @@
       "img": "https://imgur.com/uswdO0J.png"
     },
     {
+      "id": 4,
       "type": "image",
       "x": 10,
       "y": 10,
@@ -46,19 +51,21 @@
       "img": "https://imgur.com/uo2L5PS.png"
     },
     {
+      "id": 5,
       "x": 350,
       "y": 80,
-      "type": "name",
+      "type": "text",
       "color": "#E54554",
       "size": 36,
       "family": "Inter",
       "weight": 900,
-      "align": "right",
+      "align": "end",
       "limitLetters": 300,
       "baseline": "top",
-      "nameType": "username"
+      "content": "<user_name>"
     },
     {
+      "id": 7,
       "x": 260,
       "y": 60,
       "type": "text",
