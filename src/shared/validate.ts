@@ -1,4 +1,4 @@
-import { ZodError, type ZodIssue, type ZodObject } from 'zod'
+import { ZodError, type ZodType, type ZodIssue, type ZodObject } from 'zod'
 interface DataError {
   issues: ZodIssue[]
   type?: string
@@ -6,7 +6,7 @@ interface DataError {
 /**
  * @returns returns a ZodIssue array object if find an problem
  */
-export default function validate(obj: any, zodObj: ZodObject<any>): DataError | undefined {
+export default function validate(obj: any, zodObj: ZodObject<any> | ZodType): DataError | undefined {
   try {
     zodObj.parse(obj)
   } catch (error) {
