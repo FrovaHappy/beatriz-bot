@@ -1,4 +1,4 @@
-import type { Text, Image, Icon, Canvas } from '@/types/Canvas.types'
+import type { Text, Image, Icon, Canvas, Layer } from '@/types/Canvas.types'
 import { type ZodType, array, literal, number, object, string, union } from 'zod'
 import validate from '../../shared/validate'
 const LIMIT_NUMBER = 1024
@@ -13,7 +13,8 @@ const CoordinateSchema = object({
 }).strict()
 
 const LayerSchema = object({
-  type: union([literal('icon'), literal('text'), literal('image')])
+  type: union([literal('icon'), literal('text'), literal('image')]),
+  id: number().positive()
 }).strict()
 const BaseSchema = object({
   color: COLOR,
@@ -52,15 +53,15 @@ const IconBaseSchema = object({
   ])
 }).strict()
 
-export const imageZod: ZodType<Image> = LayerSchema.merge(ImageBaseSchema)
+export const imageZod: ZodType<Layer<Image>> = LayerSchema.merge(ImageBaseSchema)
   .merge(CoordinateSchema)
   .merge(BaseSchema)
   .strict()
-export const iconZod: ZodType<Icon> = LayerSchema.merge(IconBaseSchema)
+export const iconZod: ZodType<Layer<Icon>> = LayerSchema.merge(IconBaseSchema)
   .merge(CoordinateSchema)
   .merge(BaseSchema)
   .strict()
-export const textZod: ZodType<Text> = TextBaseSchema.merge(CoordinateSchema).merge(LayerSchema).strict()
+export const textZod: ZodType<Layer<Text>> = TextBaseSchema.merge(CoordinateSchema).merge(LayerSchema).strict()
 
 const canvasSchema = object({
   layers: array(union([imageZod, iconZod, textZod]))
