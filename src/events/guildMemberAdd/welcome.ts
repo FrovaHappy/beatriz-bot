@@ -1,5 +1,5 @@
 import { type GuildMember } from 'discord.js'
-import { type Canvas } from '../../commands/setWelcome/validate'
+import { type Canvas } from '@/types/Canvas.types'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import db from '../../db'
