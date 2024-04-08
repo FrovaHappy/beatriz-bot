@@ -1,77 +1,76 @@
-import type z from 'zod'
-import { type ZodObject, any, array, number, object, record, string } from 'zod'
+import type { Text, Image, Icon, Canvas } from '@/types/Canvas.types'
+import { type ZodType, array, literal, number, object, string, union } from 'zod'
 import validate from '../../shared/validate'
 const LIMIT_NUMBER = 1024
 const URL_IMAGE = /^https:\/\/(imgur.com|media.discordapp.net)\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/
 const COLOR = string()
   .regex(/^(#[a-fA-F0-9]{6}|transparent)$/, 'required hex valid with six numbers')
   .optional()
-  .nullish()
 
-const baseSchema = object({
-  type: string().regex(/^(image|icon|name|text)$/),
-  color: COLOR,
-  height: number().positive().max(LIMIT_NUMBER),
-  width: number().positive().max(LIMIT_NUMBER),
+const CoordinateSchema = object({
   x: number().positive().max(LIMIT_NUMBER),
   y: number().positive().max(LIMIT_NUMBER)
 }).strict()
 
-const textSchema = baseSchema
-  .omit({ height: true, width: true })
-  .extend({
-    size: number().positive().max(LIMIT_NUMBER),
-    family: string(),
-    weight: number().positive().max(1000).default(400),
-    limitLetters: number().int().min(0).max(LIMIT_NUMBER).default(0),
-    content: string(),
-    align: string()
-      .regex(/^(start|end|left|right|center)$/)
-      .default('start'),
-    baseline: string()
-      .regex(/^(top|hanging|middle|alphabetic|ideographic|bottom)$/)
-      .default('alphabetic')
-  })
-  .strict()
-const nameSchema = textSchema.omit({ content: true }).extend({
-  nameType: string().regex(/^(globalName|id|username)$/)
-})
+const LayerSchema = object({
+  type: union([literal('icon'), literal('text'), literal('image')])
+}).strict()
+const BaseSchema = object({
+  color: COLOR,
+  height: number().positive().max(LIMIT_NUMBER),
+  width: number().positive().max(LIMIT_NUMBER)
+}).strict()
 
-const imageSchema = baseSchema
-  .omit({ color: true })
-  .extend({
-    img: string().url().regex(URL_IMAGE)
-  })
-  .strict()
+const TextBaseSchema = object({
+  size: number().positive().max(LIMIT_NUMBER),
+  family: string(),
+  weight: number().positive().max(1000),
+  limitLetters: number().int().min(0).max(LIMIT_NUMBER),
+  content: string(),
+  align: union([literal('start'), literal('end'), literal('left'), literal('right'), literal('center')]),
+  baseline: union([
+    literal('top'),
+    literal('hanging'),
+    literal('middle'),
+    literal('alphabetic'),
+    literal('ideographic'),
+    literal('bottom')
+  ])
+}).strict()
 
-const iconSchema = baseSchema
-  .extend({
-    shape: string().regex(/^(circle|square(5|10|15|20){0,1})$/)
-  })
+const ImageBaseSchema = object({
+  img: string().url().regex(URL_IMAGE)
+}).strict()
+const IconBaseSchema = object({
+  shape: union([
+    literal('square'),
+    literal('square5'),
+    literal('square10'),
+    literal('square15'),
+    literal('square20'),
+    literal('circle')
+  ])
+}).strict()
+
+export const imageZod: ZodType<Image> = LayerSchema.merge(ImageBaseSchema)
+  .merge(CoordinateSchema)
+  .merge(BaseSchema)
   .strict()
+export const iconZod: ZodType<Icon> = LayerSchema.merge(IconBaseSchema)
+  .merge(CoordinateSchema)
+  .merge(BaseSchema)
+  .strict()
+export const textZod: ZodType<Text> = TextBaseSchema.merge(CoordinateSchema).merge(LayerSchema).strict()
 
 const canvasSchema = object({
-  background: COLOR,
-  height: number(),
-  width: number(),
-  colorDominate: COLOR,
-  layers: array(record(string(), any())).min(0).max(10)
-})
+  layers: array(union([imageZod, iconZod, textZod]))
+    .min(0)
+    .max(10)
+}).strict()
 
-export const imageZod = imageSchema
-export const iconZod = iconSchema
-export const textZod = textSchema
-export const nameZod = nameSchema
-export const canvasZod = canvasSchema
+export const canvasZod: ZodType<Canvas> = canvasSchema.merge(BaseSchema).merge(CoordinateSchema).strict()
 
-export type Image = z.infer<typeof imageZod>
-export type Name = z.infer<typeof nameZod>
-export type Icon = z.infer<typeof iconZod>
-export type Text = z.infer<typeof textZod>
-export type Canvas = z.infer<typeof canvasZod>
-
-const types: Record<string, ZodObject<any>> = {
-  name: nameZod,
+const types: Record<string, ZodType> = {
   text: textZod,
   icon: iconZod,
   image: imageZod
