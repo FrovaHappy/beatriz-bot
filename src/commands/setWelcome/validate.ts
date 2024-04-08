@@ -1,5 +1,5 @@
 import type { Text, Image, Icon, Canvas, Layer } from '@/types/Canvas.types'
-import { type ZodType, array, literal, number, object, string, union } from 'zod'
+import { type ZodType, any, array, literal, number, object, string, union } from 'zod'
 import validate from '../../shared/validate'
 const LIMIT_NUMBER = 1024
 const URL_IMAGE = /^https:\/\/(imgur.com|media.discordapp.net)\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)$/
@@ -8,9 +8,9 @@ const COLOR = string()
   .optional()
 
 const CoordinateSchema = object({
-  x: number().positive().max(LIMIT_NUMBER),
-  y: number().positive().max(LIMIT_NUMBER)
-}).strict()
+  x: number().min(0).max(LIMIT_NUMBER),
+  y: number().min(0).max(LIMIT_NUMBER)
+})
 
 const LayerSchema = object({
   type: union([literal('icon'), literal('text'), literal('image')]),
@@ -24,6 +24,7 @@ const BaseSchema = object({
 
 const TextBaseSchema = object({
   size: number().positive().max(LIMIT_NUMBER),
+  color: COLOR,
   family: string(),
   weight: number().positive().max(1000),
   limitLetters: number().int().min(0).max(LIMIT_NUMBER),
@@ -64,12 +65,10 @@ export const iconZod: ZodType<Layer<Icon>> = LayerSchema.merge(IconBaseSchema)
 export const textZod: ZodType<Layer<Text>> = TextBaseSchema.merge(CoordinateSchema).merge(LayerSchema).strict()
 
 const canvasSchema = object({
-  layers: array(union([imageZod, iconZod, textZod]))
-    .min(0)
-    .max(10)
+  layers: array(any()).min(0).max(10)
 }).strict()
 
-export const canvasZod: ZodType<Canvas> = canvasSchema.merge(BaseSchema).merge(CoordinateSchema).strict()
+export const canvasZod: ZodType<Canvas> = canvasSchema.merge(BaseSchema).strict()
 
 const types: Record<string, ZodType> = {
   text: textZod,
