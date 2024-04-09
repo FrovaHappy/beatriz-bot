@@ -1,5 +1,5 @@
-import getI18n from '@/shared/i18n'
-import messageFormatting from '@/shared/messageFormatting'
+import getI18n from '../../shared/i18n'
+import messageFormatting from '../../shared/messageFormatting'
 import { type CustomCommandInteraction } from '@/types/InteractionsCreate'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

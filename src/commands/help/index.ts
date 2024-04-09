@@ -1,8 +1,8 @@
-import { BuildCommand } from '@/buildersSchema'
-import { CommandsNames } from '@/enums'
+import { BuildCommand } from '../../buildersSchema'
+import { CommandsNames } from '../../enums'
 import { Colors, SlashCommandBuilder } from 'discord.js'
 import getI18n, { en, es } from '../../shared/i18n'
-import messageFormatting from '@/shared/messageFormatting'
+import messageFormatting from '../../shared/messageFormatting'
 import welcome from './welcome'
 const name = CommandsNames.help
 export default BuildCommand({
