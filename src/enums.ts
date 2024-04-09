@@ -7,7 +7,8 @@ export const enum CommandsNames {
   setColors = 'set-colors',
   colorsList = 'colors-list',
   colorsOrder = 'colors-order',
-  colorsRemove = 'colors-remove'
+  colorsRemove = 'colors-remove',
+  help = 'help'
 }
 export const enum ButtonsNames {
   ping = 'ping',
