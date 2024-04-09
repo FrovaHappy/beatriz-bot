@@ -3,7 +3,7 @@ import EN from '../i18n/en.json'
 
 const languages: Record<string, typeof EN> = {
   en: EN,
-  es: ES
+  es: { ...EN, ...ES }
 }
 export const es = languages.es
 export const en = languages.en
