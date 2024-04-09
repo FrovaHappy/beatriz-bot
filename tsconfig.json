@@ -16,11 +16,11 @@
     "moduleResolution": "node16",
     "resolveJsonModule": true,
     "types": ["vitest/globals"],
-  "paths": {
-    "@/*": [
-      "./src/*"
-    ]
-  }
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "src",
