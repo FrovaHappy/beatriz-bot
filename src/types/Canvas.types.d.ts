@@ -5,7 +5,7 @@ export interface TextBase {
   textAlign?: string
   textBaseline?: string
 }
-export type TypeLayer = 'text' | 'image' | 'icon' | 'name'
+export type TypeLayer = 'text' | 'image' | 'icon'
 export type Shapes = 'square' | 'square5' | 'square10' | 'square15' | 'square20' | 'circle'
 export interface Base {
   height: number
